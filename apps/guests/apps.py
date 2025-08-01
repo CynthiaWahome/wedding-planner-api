@@ -2,5 +2,7 @@ from django.apps import AppConfig
 
 
 class GuestsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'guests'
+    """Configuration for the Guests application."""
+
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.guests"

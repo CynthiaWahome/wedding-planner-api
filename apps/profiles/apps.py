@@ -2,5 +2,7 @@ from django.apps import AppConfig
 
 
 class ProfilesConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'profiles'
+    """Configuration for the Profiles app."""
+
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.profiles"
