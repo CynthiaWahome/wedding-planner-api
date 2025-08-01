@@ -5,6 +5,13 @@ This is a **Capstone Project (MVP)** designed as the foundation for a future **W
 
 ---
 
+## ⚡ Prerequisites
+
+- **Python 3.9+**
+- **PostgreSQL** installed and running (`psql --version`)
+
+---
+
 ## 🚀 Features (MVP Scope)
 
 - **Authentication**: User registration & login with JWT.
@@ -68,6 +75,7 @@ wedding-planning-api/
    ```
 
 3. **Configure environment variables**
+
    Copy the example environment file and update as needed:
 
    ```bash
@@ -75,14 +83,26 @@ wedding-planning-api/
    # Then edit .env to set your values
    ```
 
-4. **Run migrations & start server**
+4. **Set up the local database**
+
+   Run the provided script to set up your local PostgreSQL database:
+
+   ```bash
+   bash scripts/setup_db.sh
+   ```
+
+   > Make sure your `.env` file contains:
+   > `DBNAME`, `DBUSER`, `DBPASSWORD`, `DBHOST`, `DBPORT`
+
+5. **Run migrations & start server**
 
    ```bash
    python manage.py migrate
    python manage.py runserver
    ```
 
-5. **Swagger API Docs**
+6. **Swagger API Docs**
+
    Visit: [http://localhost:8000/api/schema/swagger-ui/](http://localhost:8000/api/schema/swagger-ui/)
 
 ---
