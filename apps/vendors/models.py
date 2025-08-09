@@ -21,4 +21,5 @@ class Vendor(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
+        """Return string representation of the vendor."""
         return self.name

@@ -1,0 +1,107 @@
+name: Django CI
+
+on:
+  push:
+    branches: [main, dev, feat/*]
+  pull_request:
+    branches: [main, dev, feat/*]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: ${{ secrets.DBUSER }}
+          POSTGRES_PASSWORD: ${{ secrets.DBPASSWORD }}
+          POSTGRES_DB: ${{ secrets.DBNAME }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DBHOST: localhost
+      DBPORT: 5432
+      DBNAME: ${{ secrets.DBNAME }}
+      DBUSER: ${{ secrets.DBUSER }}
+      DBPASSWORD: ${{ secrets.DBPASSWORD }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DJANGO_SETTINGS_MODULE: config.settings
+      DEBUG: False
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install safety bandit
+
+      - name: Run migrations
+        run: python manage.py migrate
+
+      - name: Run tests with coverage
+        run: pytest --disable-warnings --maxfail=1 --cov=apps --cov-report=term-missing --cov-report=html
+
+      - name: Upload coverage report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: htmlcov/
+          retention-days: 30
+
+      - name: Security scan - Safety
+        run: safety check || echo "⚠️ Security vulnerabilities found - review them!"
+
+      - name: Security scan - Bandit
+        run: bandit -r . -f txt || echo "⚠️ Bandit issues found - review them!"
+
+      - name: Run linting
+        run: ruff check .
+
+      - name: Run formatting check
+        run: ruff format --check .
+
+      - name: Run type checking
+        run: mypy .
+
+#   deploy-heroku:
+#     needs: test
+#     runs-on: ubuntu-latest
+#     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#     environment:
+#       name: production
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Deploy to Heroku
+#         uses: akhileshns/heroku-deploy@v3.12.14
+#         with:
+#           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+#           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+#           heroku_email: ${{ secrets.HEROKU_EMAIL }}
+
+#       - name: Run Heroku migrations
+#         run: |
+#           echo "Deployment successful! 🚀"
+#           heroku run python manage.py migrate -a ${{ secrets.HEROKU_APP_NAME }}

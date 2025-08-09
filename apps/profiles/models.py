@@ -20,6 +20,6 @@ class WeddingProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return string representation of the wedding profile."""
         return f"{self.bride_name} & {self.groom_name} ({self.wedding_date})"
