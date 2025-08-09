@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "apps.guests",
     "apps.profiles",
     "apps.tasks",
+    "apps.vendors",
 ]
 
 MIDDLEWARE = [
@@ -86,8 +87,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("DBNAME", "wedding_planner_db"),
+        "USER": os.environ.get("DBUSER", "wedding_user"),
+        "PASSWORD": os.environ.get("DBPASSWORD", "your_password"),
+        "HOST": os.environ.get("DBHOST", "localhost"),
+        "PORT": os.environ.get("DBPORT", "5432"),
     },
 }
 

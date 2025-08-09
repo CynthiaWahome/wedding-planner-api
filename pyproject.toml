@@ -83,6 +83,7 @@ ignore = [
     # Add more ignores as you learn what is noisy for your workflow
     "D203",   # Remove D203 to avoid conflict with D211
     "D213",   # Remove D213 to avoid conflict with D212
+    "COM812"
 ]
 exclude = [
     "migrations",
@@ -122,7 +123,7 @@ multiline-quotes = "double"
 [tool.pytest.ini_options]
 addopts = "-v --tb=short --strict-markers --reuse-db --nomigrations --cov=apps --cov-report=html --cov-report=term-missing --cov-fail-under=80"
 testpaths = ["apps", "tests"]
-python_files = ["tests.py", "test_*.py", "*_tests.py"]
+python_files = ["tests.py", "test_*.py", "*_tests.py", "**/migrations/*.py"]
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests as integration tests",
