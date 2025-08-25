@@ -86,6 +86,7 @@ ignore = [
     "D213",   # Remove D213 to avoid conflict with D212
     "COM812"
 ]
+
 exclude = [
     "migrations/*",
     "**/migrations/*",
@@ -102,6 +103,10 @@ exclude = [
     "dist",
     "*.egg-info",
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests.py" = ["S106", "S101", "B017"]  # Ignore security warnings in test files
+"**/test_*.py" = ["S106", "S101", "B017"]  # Ignore security warnings in test files
 
 [tool.ruff.format]
 quote-style = "double"
