@@ -1,5 +1,7 @@
 """Serializers for Authentication app."""
 
+from typing import ClassVar
+
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
@@ -14,8 +16,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     password_confirm = serializers.CharField(write_only=True)
 
     class Meta:
+        """Meta class for user registration serializer."""
+
         model = User
-        fields = ["username", "email", "first_name", "last_name", "password", "password_confirm"]
+        fields: ClassVar = [
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "password",
+            "password_confirm",
+        ]
 
     def validate(self, attrs):
         """Validate password confirmation."""
@@ -26,8 +37,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Create user with hashed password."""
         validated_data.pop("password_confirm")
-        user = User.objects.create_user(**validated_data)
-        return user
+        return User.objects.create_user(**validated_data)
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -58,6 +68,8 @@ class UserSerializer(serializers.ModelSerializer):
     """Serializer for user profile information."""
 
     class Meta:
+        """Meta class for user serializer."""
+
         model = User
-        fields = ["id", "username", "email", "first_name", "last_name", "date_joined"]
-        read_only_fields = ["id", "username", "date_joined"]
+        fields: ClassVar = ["id", "username", "email", "first_name", "last_name", "date_joined"]
+        read_only_fields: ClassVar = ["id", "username", "date_joined"]
