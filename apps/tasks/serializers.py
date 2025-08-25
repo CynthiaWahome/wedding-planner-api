@@ -1,4 +1,6 @@
-"""Serializers for Tasks app - Capstone MVP"""
+"""Serializers for Tasks app - Capstone MVP."""
+
+from typing import ClassVar
 
 from rest_framework import serializers
 
@@ -8,7 +10,7 @@ from .models import Task
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    """Serializer for task management"""
+    """Serializer for task management."""
 
     wedding_profile = serializers.StringRelatedField(read_only=True)
     vendor = serializers.StringRelatedField(read_only=True)
@@ -16,8 +18,10 @@ class TaskSerializer(serializers.ModelSerializer):
     updated_at = serializers.DateTimeField(read_only=True)
 
     class Meta:
+        """Meta configuration for serializer."""
+
         model = Task
-        fields = [
+        fields: ClassVar = [
             "id",
             "wedding_profile",
             "title",
@@ -30,7 +34,7 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
     def validate_assigned_to(self, value):
-        """Validate assignment choice"""
+        """Validate assignment choice."""
         valid_choices = [choice[0] for choice in TaskAssignment.CHOICES]
         if value not in valid_choices:
             raise serializers.ValidationError(f"Invalid choice. Must be one of: {valid_choices}")
@@ -38,19 +42,23 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class TaskCreateSerializer(serializers.ModelSerializer):
-    """Serializer for creating tasks"""
+    """Serializer for creating tasks."""
 
     class Meta:
+        """Meta configuration for serializer."""
+
         model = Task
-        fields = ["title", "description", "assigned_to", "vendor"]
+        fields: ClassVar = ["title", "description", "assigned_to", "vendor"]
 
     def validate_assigned_to(self, value):
+        """Validate assigned_to field."""
         valid_choices = [choice[0] for choice in TaskAssignment.CHOICES]
         if value not in valid_choices:
             raise serializers.ValidationError(f"Invalid choice. Must be one of: {valid_choices}")
         return value
 
     def create(self, validated_data):
+        """Create instance with auto-assignment."""
         # Auto-assign to user's wedding profile
         user = self.context["request"].user
         validated_data["wedding_profile"] = user.wedding_profile

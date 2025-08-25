@@ -56,6 +56,14 @@ jobs:
           pip install -r requirements.txt
           pip install safety bandit
 
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..30}; do
+            nc -z localhost 5432 && echo "Postgres is up!" && break
+            echo "Waiting for Postgres..."
+            sleep 1
+          done
+
       - name: Run migrations
         run: python manage.py migrate
 

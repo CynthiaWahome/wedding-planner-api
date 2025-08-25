@@ -1,0 +1,58 @@
+BE Capstone Project: E-commerce Product API
+Project Overview:
+
+As a backend developer, your task is to design and implement an E-commerce Product API using Django and Django REST Framework. This API will serve as the backend for managing products on an e-commerce platform, allowing users to create, update, delete, and view products. You will build and deploy a fully functional API, mimicking the real-world responsibilities of a backend developer in the e-commerce space, focusing on product management, user authentication, and search functionality.
+
+Functional Requirements:
+Product Management (CRUD):
+
+Implement the ability to Create, Read, Update, and Delete (CRUD) products.
+Each product should have the following attributes: Name, Description, Price, Category, Stock Quantity, Image URL, and Created Date.
+Ensure validation for required fields like Price, Name, and Stock Quantity.
+Make sure the Stock Quantity is automatically reduced when an order is placed (future enhancement or consider as optional for now).
+Users Management (CRUD):
+
+Implement CRUD operations for users who will manage the products.
+A user should have a unique Username, Email, and Password.
+Only authenticated users should be able to manage products (i.e., create, update, delete).
+Product Search:
+
+Create an endpoint to search for products by Name or Category.
+Allow for partial matches in product names for flexible search results.
+Implement pagination for search results to improve performance when there are many products.
+Product View:
+
+Create an endpoint to retrieve a list of products or view individual product details by Product ID.
+Include an optional filter for users to view products by Category, Price Range, or Stock Availability.
+Make sure that product details include all relevant information like Name, Description, Price, Category, Stock Quantity, and Image URL.
+Technical Requirements:
+Database:
+
+Use Django ORM to interact with the database.
+Define models for Products and Users.
+Each product should be associated with a category for better organization (e.g., Electronics, Clothing, etc.).
+Authentication:
+
+Implement user authentication using Django’s built-in authentication system.
+Only authenticated users should be able to perform CRUD operations on products.
+Optionally, implement token-based authentication (JWT) to secure the API further.
+API Design:
+
+Use Django Rest Framework (DRF) to design and expose API endpoints.
+Follow RESTful principles by using appropriate HTTP methods (GET, POST, PUT, DELETE).
+Ensure proper error handling, returning appropriate HTTP status codes for various actions (e.g., 404 for not found, 400 for bad request).
+Deployment:
+
+Deploy the API on Heroku or PythonAnywhere.
+Ensure the deployed API is accessible, stable, and secure.
+Pagination and Filtering:
+
+Add pagination to product listing and search endpoints to handle large datasets efficiently.
+Implement filtering options for Category, Price Range, and Stock Availability to enhance the user experience when viewing products.
+Stretch Goals (Optional):
+Product Reviews: Allow users to submit reviews and ratings for products and create an endpoint to retrieve product reviews.
+Product Categories: Implement a more advanced category management system where users can create, update, and delete categories dynamically.
+Product Images: Allow users to upload multiple images for products, storing the image URLs in the database.
+Wishlist: Add a feature where users can add products to a wishlist, with endpoints to manage this functionality.
+Stock Management: Implement an automatic stock reduction system when a user “purchases” a product (or mark it as reserved).
+Discounts and Promotions: Add functionality for users to create promotional discounts on certain products, applying price reductions accordingly.

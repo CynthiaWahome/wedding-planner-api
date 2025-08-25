@@ -1,0 +1,82 @@
+BE Capstone Project Ideas
+Project Options
+Library Management System API
+
+Description: Create an API to manage a library system where users can check out and return books, and view available books.
+Requirements:
+CRUD operations for books and users.
+Endpoint for checking out and returning books.
+Use Django ORM for database interactions.
+Deploy the API on Heroku or PythonAnywhere.
+Task Management API
+
+Description: Build an API to manage tasks where users can create, update, and delete tasks, and mark tasks as complete or incomplete.
+Requirements:
+CRUD operations for tasks and users.
+Endpoint for marking tasks as complete or incomplete.
+Use Django ORM for database interactions.
+Deploy the API on Heroku or PythonAnywhere.
+E-commerce Product API
+
+Description: Develop an API for managing an e-commerce platform’s products, where users can add, update, and delete products, and view product details.
+Requirements:
+CRUD operations for products and users.
+Endpoint for searching products by name or category.
+Use Django ORM for database interactions.
+Deploy the API on Heroku or PythonAnywhere.
+Movie Review API
+
+Description: Create an API to manage movie reviews where users can add, update, and delete reviews, and view reviews for a specific movie.
+Requirements:
+CRUD operations for reviews and users.
+Endpoint for viewing reviews by movie.
+Use Django ORM for database interactions.
+Deploy the API on Heroku or PythonAnywhere.
+Event Management API
+
+Description: Build an API to manage events where users can create, update, and delete events, and view upcoming events.
+Requirements:
+CRUD operations for events and users.
+Endpoint for viewing upcoming events.
+Use Django ORM for database interactions.
+Deploy the API on Heroku or PythonAnywhere.
+Blogging Platform API
+
+Description: Develop an API for a blogging platform where users can create, update, and delete blog posts, and view posts by category or author.
+Requirements:
+CRUD operations for blog posts and users.
+Endpoint for viewing posts by category or author.
+Use Django ORM for database interactions.
+Deploy the API on Heroku or PythonAnywhere.
+Fitness Tracker API
+
+Description: Create an API to manage fitness activities where users can log, update, and delete activities, and view activity history.
+Requirements:
+CRUD operations for activities and users.
+Endpoint for viewing activity history.
+Use Django ORM for database interactions.
+Deploy the API on Heroku or PythonAnywhere.
+Recipe Management API
+
+Description: Build an API to manage recipes where users can add, update, and delete recipes, and view recipes by category or ingredient.
+Requirements:
+CRUD operations for recipes and users.
+Endpoint for viewing recipes by category or ingredient.
+Use Django ORM for database interactions.
+Deploy the API on Heroku or PythonAnywhere.
+Inventory Management API
+
+Description: Develop an API to manage inventory for a store where users can add, update, and delete inventory items, and view inventory levels.
+Requirements:
+CRUD operations for inventory items and users.
+Endpoint for viewing inventory levels.
+Use Django ORM for database interactions.
+Deploy the API on Heroku or PythonAnywhere.
+Social Media API
+
+Description: Create an API for a social media platform where users can create, update, and delete posts, follow other users, and view a feed of posts.
+Requirements:
+CRUD operations for posts and users.
+Endpoint for following users and viewing a feed of posts.
+Use Django ORM for database interactions.
+Deploy the API on Heroku or PythonAnywhere.

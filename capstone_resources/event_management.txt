@@ -1,0 +1,57 @@
+BE Capstone Project: Event Management API
+Project Overview:
+As a backend developer, your task is to design and implement an Event Management API using Django and Django REST Framework. This API will allow users to manage events by creating, updating, deleting, and viewing upcoming events. You will build a fully functional API that interacts with a database to store event information and manage users, simulating a real-world scenario in event management platforms. The project will give you experience with handling complex relationships between users and events, as well as deploying a live API.
+
+Functional Requirements:
+Event Management (CRUD):
+
+Implement the ability to Create, Read, Update, and Delete (CRUD) events.
+Each event should have the following attributes: Title, Description, Date and Time, Location, Organizer, Capacity (maximum number of attendees), and Created Date.
+Ensure validation for required fields such as Title, Date and Time, and Location.
+Prevent users from creating events with past dates.
+Users Management (CRUD):
+
+Implement CRUD operations for users.
+Each user should have a unique Username, Email, and Password.
+Users should only be able to manage their own events.
+Implement permission checks to ensure that users can only update or delete events they created.
+View Upcoming Events:
+
+Create an endpoint to list all upcoming events.
+Filter the list by events that have a future Date and Time.
+Provide optional query filters such as searching by Title, Location, or filtering by Date Range.
+Event Capacity Management:
+
+Ensure that each event has a maximum capacity, and when the capacity is reached, new attendees cannot register.
+Optionally, implement a waitlist feature where users can join if the event is fully booked.
+Technical Requirements:
+Database:
+
+Use Django ORM to interact with the database.
+Define models for Events and Users.
+Ensure that each event is associated with its creator (organizer) and only that user can manage it.
+Authentication:
+
+Implement user authentication using Django’s built-in authentication system.
+Only authenticated users should be able to create, update, or delete events.
+Optionally, implement token-based authentication (JWT) for a more secure API experience.
+API Design:
+
+Use Django Rest Framework (DRF) to design and expose API endpoints.
+Follow RESTful principles, using appropriate HTTP methods (GET, POST, PUT, DELETE) for different operations.
+Ensure proper error handling with relevant HTTP status codes (e.g., 404 for not found, 400 for bad request).
+Deployment:
+
+Deploy the API on Heroku or PythonAnywhere.
+Ensure the API is accessible and performs well in the deployed environment.
+Pagination and Filtering:
+
+Add pagination to the list of upcoming events to handle large datasets efficiently.
+Provide filtering options for users to search events by Title, Location, or filter by Date Range.
+Stretch Goals (Optional):
+User Registration for Events: Implement functionality where users can register for events, with the event’s capacity being reduced each time a new registration is made.
+Event Categories: Allow events to be categorized (e.g., Conference, Workshop, Concert), and add filtering options to search events by category.
+Notifications: Implement a notification system where users are alerted via email or in-app notifications when the event date is approaching.
+Event Comments and Feedback: Add functionality for users to leave comments or feedback on past events, providing event organizers with insights.
+Calendar Integration: Add functionality to integrate with external calendars (e.g., Google Calendar) so users can easily add event reminders to their personal calendar.
+Recurring Events: Implement support for recurring events (e.g., weekly or monthly events) with automatic generation of future occurrences.

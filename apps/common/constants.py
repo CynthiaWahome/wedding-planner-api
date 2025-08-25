@@ -1,15 +1,20 @@
-"""Constants for Wedding Planner API - Capstone MVP
+"""Constants for Wedding Planner API - Capstone MVP.
+
 Keep it simple for graduation, expand after.
 """
+
+from typing import ClassVar
 
 
 # Task Assignment (MVP)
 class TaskAssignment:
+    """Task assignment choices for wedding planning."""
+
     BRIDE = "bride"
     GROOM = "groom"
     COUPLE = "couple"
 
-    CHOICES = [
+    CHOICES: ClassVar = [
         (BRIDE, "Bride"),
         (GROOM, "Groom"),
         (COUPLE, "Couple"),
@@ -18,12 +23,14 @@ class TaskAssignment:
 
 # Guest RSVP Status (MVP)
 class RSVPStatus:
+    """RSVP status choices for guest management."""
+
     INVITED = "invited"
     CONFIRMED = "confirmed"
     DECLINED = "declined"
     MAYBE = "maybe"
 
-    CHOICES = [
+    CHOICES: ClassVar = [
         (INVITED, "Invited"),
         (CONFIRMED, "Confirmed"),
         (DECLINED, "Declined"),
@@ -33,6 +40,8 @@ class RSVPStatus:
 
 # Basic Vendor Categories (MVP)
 class VendorCategory:
+    """Vendor category choices for wedding services."""
+
     VENUE = "venue"
     CATERING = "catering"
     PHOTOGRAPHY = "photography"
@@ -41,7 +50,7 @@ class VendorCategory:
     ATTIRE = "attire"
     OTHER = "other"
 
-    CHOICES = [
+    CHOICES: ClassVar = [
         (VENUE, "Venue"),
         (CATERING, "Catering"),
         (PHOTOGRAPHY, "Photography"),
@@ -54,6 +63,8 @@ class VendorCategory:
 
 # Team Roles (MVP)
 class TeamRole:
+    """Team role choices for wedding party members."""
+
     BEST_MAN = "best_man"
     BEST_LADY = "best_lady"
     BRIDESMAID = "bridesmaid"
@@ -62,7 +73,7 @@ class TeamRole:
     COORDINATOR = "coordinator"
     OTHER = "other"
 
-    CHOICES = [
+    CHOICES: ClassVar = [
         (BEST_MAN, "Best Man"),
         (BEST_LADY, "Best Lady"),
         (BRIDESMAID, "Bridesmaid"),
@@ -75,6 +86,8 @@ class TeamRole:
 
 # API Response Messages
 class Messages:
+    """Standard API response messages."""
+
     # Success
     SUCCESS = "Operation completed successfully"
     CREATED = "Resource created successfully"

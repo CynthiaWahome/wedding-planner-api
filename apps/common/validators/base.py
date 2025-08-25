@@ -1,4 +1,5 @@
-"""Basic validators for Wedding Planner API - Capstone MVP
+"""Basic validators for Wedding Planner API - Capstone MVP.
+
 Keep it simple for graduation.
 """
 

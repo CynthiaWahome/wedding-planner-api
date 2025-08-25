@@ -1,0 +1,57 @@
+BE Capstone Project: Recipe Management API
+Project Overview:
+As a backend developer, your task is to design and implement a Recipe Management API using Django and Django REST Framework. This API will allow users to manage recipes by creating, updating, deleting, and viewing them by category or ingredient. You will build a fully functional API that stores recipe data, manages users, and enables efficient search functionality. This project will simulate the tasks involved in developing a real-world recipe management system, with a focus on CRUD operations, database management, and deployment.
+
+Functional Requirements:
+Recipe Management (CRUD):
+
+Implement the ability to Create, Read, Update, and Delete (CRUD) recipes.
+Each recipe should include the following attributes: Title, Description, Ingredients (list), Instructions, Category (e.g., Dessert, Main Course), Preparation Time, Cooking Time, Servings, and Created Date.
+Ensure validations for required fields such as Title, Ingredients, and Instructions.
+Users Management (CRUD):
+
+Implement CRUD operations for users.
+Each user should have a unique Username, Email, and Password.
+Only authenticated users should be able to create, update, or delete their own recipes.
+Implement permission checks to ensure that users can only edit or delete their own recipes.
+View Recipes by Category or Ingredient:
+
+Create an endpoint to allow users to view recipes by Category (e.g., Dessert, Breakfast, Vegetarian).
+Create an endpoint to allow users to view recipes by Ingredient (e.g., all recipes containing “chicken”).
+Optionally, allow users to filter by multiple ingredients and search for recipes that contain specific combinations.
+Search and Filter Recipes:
+
+Implement a search feature that allows users to search for recipes by Title, Category, Ingredients, or Preparation Time.
+Add optional filters for Cooking Time, Servings, or Preparation Time to refine the search results.
+Technical Requirements:
+Database:
+
+Use Django ORM to interact with the database.
+Define models for Recipes and Users.
+Ensure each recipe is associated with its creator (user) and recipes can be categorized and filtered by ingredients.
+Authentication:
+
+Implement user authentication using Django’s built-in authentication system.
+Users must be logged in to create, update, or delete recipes.
+Optionally, implement token-based authentication (JWT) to secure the API further.
+API Design:
+
+Use Django Rest Framework (DRF) to design and expose the necessary API endpoints.
+Follow RESTful principles by using appropriate HTTP methods (GET, POST, PUT, DELETE).
+Ensure proper error handling with appropriate HTTP status codes (e.g., 404 for not found, 400 for bad request).
+Deployment:
+
+Deploy the API on Heroku or PythonAnywhere.
+Ensure that the API is accessible, secure, and performs well in the deployed environment.
+Pagination and Sorting:
+
+Implement pagination for recipe listings to handle large datasets efficiently.
+Provide sorting options, such as sorting recipes by Preparation Time, Cooking Time, or Servings.
+Stretch Goals (Optional):
+Recipe Ratings and Reviews: Allow users to rate and review recipes, with endpoints for viewing the most popular or highest-rated recipes.
+Favorite Recipes: Implement a feature that allows users to mark recipes as favorites, with an endpoint for managing and viewing their favorite recipes.
+Recipe Images: Add functionality for users to upload images with their recipes, storing image URLs in the database.
+Meal Planner: Allow users to create meal plans by selecting multiple recipes for different days, with the option to view a week’s worth of meal plans.
+Shopping List: Implement a shopping list feature where users can generate a list of ingredients based on selected recipes.
+Recipe Categories: Allow users to create new recipe categories and manage them dynamically (e.g., Seasonal, Special Diets, etc.).
+Nutritional Information: Optionally, integrate a third-party API to calculate and display the nutritional information for each recipe (e.g., calories, protein, carbs).
