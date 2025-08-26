@@ -1,146 +1,64 @@
-[build-system]
-requires = ["setuptools>=45", "wheel"]
-build-backend = "setuptools.build_meta"
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+testpaths = ["apps", "tests"]
+python_files = ["test_*.py", "*_test.py", "tests.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--strict-markers --strict-config --disable-warnings"
 
-[project]
-name = "wedding_planner_api"
-version = "0.1.0"
-description = "A Django REST API for wedding planning and progress tracking."
-readme = "README.md"
-requires-python = ">=3.9"
-license = {text = "MIT"}
-authors = [
-    {name = "cycy", email = "xcyclone.cycy@gmail.com"},
-]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Environment :: Web Environment",
-    "Framework :: Django",
-    "Framework :: Django :: 4.2",
-    "Intended Audience :: Developers",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Topic :: Internet :: WWW/HTTP",
-]
-dependencies = [
-    "Django>=4.2,<5.0",
-    "djangorestframework>=3.16.0,<4.0",
-    "djangorestframework-simplejwt>=5.5.1,<6.0",
-    "drf-spectacular>=0.28.0,<1.0",
-    "psycopg2-binary>=2.9.10,<3.0",
-    "python-decouple>=3.8,<4.0",
-    "ruff==0.12.8",
-    "pre-commit==4.2.0",
-    "django-filter>=23.1,<24.0",
-    "django-cors-headers>=3.14.0,<4.0",
-    "pytest>=8.4.1,<9.0",
-    "pytest-django",
-    "mypy>=1.10.1,<2.0",
-    "django-stubs",
-    "djangorestframework-stubs",
-    "attrs>=25.3.0,<26.0",
-    "jsonschema>=4.25.0,<5.0",
-    "PyJWT>=2.10.1,<3.0",
-    "inflection>=0.5.1,<1.0",
-    "sqlparse>=0.5.3,<1.0",
-    "pyyaml>=6.0,<7.0",
-    "typing-extensions>=4.14.1,<5.0",
-    "pytest-cov>=4.1.0,<5.0",
-]
+[tool.coverage.run]
+source = ["apps"]
+omit = ["*/migrations/*", "*/venv/*", "*/env/*", "*/tests/*", "*/test_*"]
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "def __repr__", "raise AssertionError", "raise NotImplementedError"]
 
 [tool.ruff]
-line-length = 100
 target-version = "py311"
+line-length = 88
 
 [tool.ruff.lint]
 select = [
-    "E",      # pycodestyle errors (PEP8)
-    "W",      # pycodestyle warnings
-    "F",      # pyflakes (logic errors, unused imports)
-    "I",      # isort (import sorting)
-    "N",      # pep8-naming (naming conventions)
-    "D",      # pydocstyle (docstrings)
-    "UP",     # pyupgrade (modern Python)
-    "C4",     # flake8-comprehensions (list/set/dict comprehensions)
-    "B",      # flake8-bugbear (likely bugs, best practices)
-    "A",      # flake8-builtins (shadowing builtins)
-    "COM",    # flake8-commas (comma placement)
-    "T20",    # flake8-print (print statements)
-    "Q",      # flake8-quotes (quote consistency)
-    "RUF",    # ruff-specific rules
-    "S",      # flake8-bandit (security)
-    "PIE",    # flake8-pie (misc linting)
-    "SIM",    # flake8-simplify (simplification)
-    "RSE",    # flake8-raise (raise statement issues)
-    "RET",    # flake8-return (return statement issues)
-    "ICN",    # flake8-import-conventions
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "D",   # pydocstyle
 ]
 ignore = [
-    "D100",   # Ignore missing docstring in public module
-    "D104",   # Ignore missing docstring in public package
-    # Add more ignores as you learn what is noisy for your workflow
-    "D203",   # Remove D203 to avoid conflict with D211
-    "D213",   # Remove D213 to avoid conflict with D212
-    "COM812"
-]
-exclude = [
-    "migrations/*",
-    "**/migrations/*",
-    "venv",
-    ".venv",
-    "env",
-    ".env",
-    ".git",
-    "__pycache__",
-    "node_modules",
-    ".mypy_cache",
-    ".pytest_cache",
-    "build",
-    "dist",
-    "*.egg-info",
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D104", # Missing docstring in public package
+    "D105", # Missing docstring in magic method
 ]
 
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-skip-magic-trailing-comma = false
-line-ending = "auto"
-docstring-code-format = true
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/**" = ["E501", "D"]
+"**/tests.py" = ["S106", "S101", "B017", "D"]
+"**/test_*.py" = ["S106", "S101", "B017", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.ruff.lint.isort]
-known-first-party = ["apps"]
-known-third-party = ["django", "rest_framework"]
+known-first-party = ["apps", "config"]
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 
-[tool.ruff.lint.mccabe]
-max-complexity = 10
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+plugins = ["mypy_django_plugin.main"]
 
-[tool.ruff.lint.flake8-quotes]
-inline-quotes = "double"
-multiline-quotes = "double"
+[[tool.mypy.overrides]]
+module = "*.migrations.*"
+ignore_errors = true
 
-[tool.pytest.ini_options]
-addopts = "-v --tb=short --strict-markers --reuse-db --cov=apps --cov-report=html --cov-report=term-missing --cov-fail-under=80"
-testpaths = ["apps", "tests"]
-python_files = ["tests.py", "test_*.py", "*_tests.py"]
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-    "unit: marks tests as unit tests",
-    "model: marks tests as model tests",
-    "api: marks tests as API tests"
-]
-filterwarnings = [
-    "ignore::django.utils.deprecation.RemovedInDjango50Warning",
-    "ignore::DeprecationWarning"
-]
-
-[tool.commitizen]
-name = "cz_conventional_commits"
-version = "0.1.0"
-version_files = [
-    "pyproject.toml:version"
-]
+[tool.django-stubs]
+django_settings_module = "config.settings"

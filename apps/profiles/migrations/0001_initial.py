@@ -31,7 +31,9 @@ class Migration(migrations.Migration):
                 ("venue", models.CharField(blank=True, max_length=200)),
                 (
                     "budget",
-                    models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True),
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=12, null=True
+                    ),
                 ),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),

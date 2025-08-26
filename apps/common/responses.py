@@ -1,4 +1,5 @@
-"""Consistent API Response Format for Wedding Planner API
+"""Consistent API Response Format for Wedding Planner API.
+
 Ensures all endpoints return responses in the same structure.
 """
 
@@ -28,7 +29,7 @@ class APIResponse:
         status_code: int = status.HTTP_200_OK,
         meta: dict | None = None,
     ) -> Response:
-        """Standard success response"""
+        """Return a standard success response."""
         response_data = {
             "success": True,
             "message": message,
@@ -42,9 +43,11 @@ class APIResponse:
 
     @staticmethod
     def created(
-        data: Any = None, message: str = "Resource created successfully", meta: dict | None = None
+        data: Any = None,
+        message: str = "Resource created successfully",
+        meta: dict | None = None,
     ) -> Response:
-        """Standard creation response"""
+        """Return a standard creation response."""
         return APIResponse.success(
             data=data, message=message, status_code=status.HTTP_201_CREATED, meta=meta
         )
@@ -56,7 +59,7 @@ class APIResponse:
         status_code: int = status.HTTP_400_BAD_REQUEST,
         data: Any = None,
     ) -> Response:
-        """Standard error response"""
+        """Return a standard error response."""
         response_data = {
             "success": False,
             "message": message,
@@ -70,24 +73,30 @@ class APIResponse:
 
     @staticmethod
     def not_found(message: str = "Resource not found", data: Any = None) -> Response:
-        """Standard 404 response"""
-        return APIResponse.error(message=message, status_code=status.HTTP_404_NOT_FOUND, data=data)
+        """Return a standard 404 response."""
+        return APIResponse.error(
+            message=message, status_code=status.HTTP_404_NOT_FOUND, data=data
+        )
 
     @staticmethod
     def unauthorized(message: str = "Unauthorized access") -> Response:
-        """Standard 401 response"""
-        return APIResponse.error(message=message, status_code=status.HTTP_401_UNAUTHORIZED)
+        """Return a standard 401 response."""
+        return APIResponse.error(
+            message=message, status_code=status.HTTP_401_UNAUTHORIZED
+        )
 
     @staticmethod
     def forbidden(message: str = "Access forbidden") -> Response:
-        """Standard 403 response"""
+        """Return a standard 403 response."""
         return APIResponse.error(message=message, status_code=status.HTTP_403_FORBIDDEN)
 
     @staticmethod
     def validation_error(errors: list, message: str = "Validation failed") -> Response:
-        """Standard validation error response"""
+        """Return a standard validation error response."""
         return APIResponse.error(
-            message=message, errors=errors, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
+            message=message,
+            errors=errors,
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         )
 
     @staticmethod
@@ -98,7 +107,7 @@ class APIResponse:
         total: int,
         message: str = "Data retrieved successfully",
     ) -> Response:
-        """Standard paginated response"""
+        """Return a standard paginated response."""
         total_pages = (total + per_page - 1) // per_page
 
         meta = {

@@ -22,7 +22,9 @@ class Guest(models.Model):
     )
     name = models.CharField(max_length=100)
     email = models.EmailField(blank=True)
-    rsvp_status = models.CharField(max_length=10, choices=RSVP_CHOICES, default="invited")
+    rsvp_status = models.CharField(
+        max_length=10, choices=RSVP_CHOICES, default="invited"
+    )
     plus_one = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)

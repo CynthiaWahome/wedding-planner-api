@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # Third party apps
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "django_filters",
     "corsheaders",
     "drf_spectacular",
@@ -111,7 +112,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
@@ -183,7 +184,8 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(
         days=int(os.environ.get("JWT_REFRESH_TOKEN_LIFETIME_DAYS", 7))
     ),
-    "ROTATE_REFRESH_TOKENS": os.environ.get("JWT_ROTATE_REFRESH_TOKENS", "True").lower() == "true",
+    "ROTATE_REFRESH_TOKENS": os.environ.get("JWT_ROTATE_REFRESH_TOKENS", "True").lower()
+    == "true",
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": True,
     "ALGORITHM": "HS256",
@@ -208,7 +210,9 @@ SPECTACULAR_SETTINGS = {
 # CORS Configuration (from environment)
 CORS_ALLOWED_ORIGINS = [
     origin.strip()
-    for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+    for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(
+        ","
+    )
 ]
 
 CORS_ALLOW_CREDENTIALS = True

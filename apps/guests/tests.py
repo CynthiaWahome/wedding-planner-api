@@ -26,4 +26,4 @@ def test_guest_str() -> None:
         rsvp_status="invited",
         plus_one=True,
     )
-    assert str(guest) == "Alice (invited)"  # noqa
+    assert str(guest) == "Alice (invited)"
