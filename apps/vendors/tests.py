@@ -27,4 +27,4 @@ def test_vendor_str() -> None:
         phone="123456789",
         email="cake@boss.com",
     )
-    assert str(vendor) == "Cake Boss"  # noqa
+    assert str(vendor) == "Cake Boss"

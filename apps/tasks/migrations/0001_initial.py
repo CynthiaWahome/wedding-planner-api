@@ -30,7 +30,11 @@ class Migration(migrations.Migration):
                 (
                     "assigned_to",
                     models.CharField(
-                        choices=[("bride", "Bride"), ("groom", "Groom"), ("couple", "Couple")],
+                        choices=[
+                            ("bride", "Bride"),
+                            ("groom", "Groom"),
+                            ("couple", "Couple"),
+                        ],
                         max_length=10,
                     ),
                 ),
