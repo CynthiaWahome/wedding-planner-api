@@ -10,7 +10,8 @@ drf-spectacular==0.28.0
 inflection==0.5.1
 jsonschema==4.25.0
 jsonschema-specifications==2025.4.1
-mypy==1.10.1
+mypy>=1.7.0,<1.8.0
+django-stubs[compatible-mypy]>=4.2.7
 pre-commit==4.2.0
 psycopg2-binary==2.9.10
 PyJWT==2.10.1
@@ -25,4 +26,3 @@ rpds-py==0.26.0
 ruff==0.12.8
 sqlparse==0.5.3
 typing-extensions==4.14.1
-pytest==8.4.1
