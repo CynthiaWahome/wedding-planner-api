@@ -42,21 +42,39 @@ class RSVPStatus:
 class VendorCategory:
     """Vendor category choices for wedding services."""
 
-    VENUE = "venue"
     CATERING = "catering"
     PHOTOGRAPHY = "photography"
-    MUSIC = "music"
-    DECORATION = "decoration"
+    VIDEOGRAPHY = "videography"
+    MUSIC_DJ = "music_dj"
+    LIVE_BAND = "live_band"
+    FLOWERS = "flowers"
+    DECORATIONS = "decorations"
+    VENUE = "venue"
+    TRANSPORTATION = "transportation"
+    BEAUTY = "beauty"
     ATTIRE = "attire"
+    JEWELRY = "jewelry"
+    STATIONERY = "stationery"
+    CAKE = "cake"
+    PLANNING = "planning"
     OTHER = "other"
 
     CHOICES: ClassVar = [
-        (VENUE, "Venue"),
         (CATERING, "Catering"),
         (PHOTOGRAPHY, "Photography"),
-        (MUSIC, "Music & Entertainment"),
-        (DECORATION, "Decoration"),
+        (VIDEOGRAPHY, "Videography"),
+        (MUSIC_DJ, "Music DJ"),
+        (LIVE_BAND, "Live Band"),
+        (FLOWERS, "Flowers"),
+        (DECORATIONS, "Decorations"),
+        (VENUE, "Venue"),
+        (TRANSPORTATION, "Transportation"),
+        (BEAUTY, "Beauty"),
         (ATTIRE, "Attire"),
+        (JEWELRY, "Jewelry"),
+        (STATIONERY, "Stationery"),
+        (CAKE, "Cake"),
+        (PLANNING, "Planning"),
         (OTHER, "Other"),
     ]
 
@@ -81,6 +99,47 @@ class TeamRole:
         (FAMILY, "Family Member"),
         (COORDINATOR, "Coordinator"),
         (OTHER, "Other"),
+    ]
+
+
+# Validation Limits
+class ValidationLimits:
+    """Validation limits for various fields."""
+
+    # Budget limits (KSH)
+    MIN_BUDGET = 50000  # KSH 50,000 minimum
+    MAX_BUDGET = 50000000  # KSH 50M maximum
+
+    # Service cost limits (KSH)
+    MIN_SERVICE_COST = 1000  # KSH 1,000 minimum
+    MAX_SERVICE_COST = 10000000  # KSH 10M maximum
+    MAX_HOURLY_RATE = 100000  # KSH 100k/hour max
+
+    # Time limits (hours)
+    MIN_ESTIMATED_HOURS = 0.25  # 15 minutes minimum
+    MAX_ESTIMATED_HOURS = 200  # 200 hours maximum per task
+
+
+# Payment Terms
+class PaymentTerms:
+    """Payment terms choices for vendors."""
+
+    FULL_UPFRONT = "full_upfront"
+    DEPOSIT_50 = "deposit_50"
+    DEPOSIT_30 = "deposit_30"
+    INSTALLMENTS = "installments"
+    PAYMENT_ON_DELIVERY = "payment_on_delivery"
+    NET_30 = "net_30"
+    CUSTOM = "custom"
+
+    CHOICES: ClassVar = [
+        (FULL_UPFRONT, "Full Upfront"),
+        (DEPOSIT_50, "50% Deposit"),
+        (DEPOSIT_30, "30% Deposit"),
+        (INSTALLMENTS, "Installments"),
+        (PAYMENT_ON_DELIVERY, "Payment on Delivery"),
+        (NET_30, "Net 30"),
+        (CUSTOM, "Custom"),
     ]
 
 

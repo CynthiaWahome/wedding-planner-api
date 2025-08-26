@@ -4,7 +4,11 @@ from typing import ClassVar
 
 from rest_framework import serializers
 
-from apps.common.constants import VendorCategory
+from apps.vendors.validators import (
+    validate_vendor_category,
+    validate_vendor_contact_info,
+    validate_vendor_name,
+)
 
 from .models import Vendor
 
@@ -35,13 +39,26 @@ class VendorSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
+    def validate_name(self, value):
+        """Validate vendor name format."""
+        validate_vendor_name(value)
+        return value
+
+    def validate_phone(self, value):
+        """Validate vendor phone number."""
+        if value:
+            validate_vendor_contact_info("phone", value)
+        return value
+
+    def validate_email(self, value):
+        """Validate vendor email."""
+        if value:
+            validate_vendor_contact_info("email", value)
+        return value
+
     def validate_category(self, value):
         """Validate vendor category choice."""
-        valid_choices = [choice[0] for choice in VendorCategory.CHOICES]
-        if value not in valid_choices:
-            raise serializers.ValidationError(
-                f"Invalid choice. Must be one of: {valid_choices}"
-            )
+        validate_vendor_category(value)
         return value
 
 
@@ -61,13 +78,26 @@ class VendorCreateSerializer(serializers.ModelSerializer):
             "notes",
         ]
 
+    def validate_name(self, value):
+        """Validate vendor name format."""
+        validate_vendor_name(value)
+        return value
+
+    def validate_phone(self, value):
+        """Validate vendor phone number."""
+        if value:
+            validate_vendor_contact_info("phone", value)
+        return value
+
+    def validate_email(self, value):
+        """Validate vendor email."""
+        if value:
+            validate_vendor_contact_info("email", value)
+        return value
+
     def validate_category(self, value):
         """Validate category field."""
-        valid_choices = [choice[0] for choice in VendorCategory.CHOICES]
-        if value not in valid_choices:
-            raise serializers.ValidationError(
-                f"Invalid choice. Must be one of: {valid_choices}"
-            )
+        validate_vendor_category(value)
         return value
 
     def create(self, validated_data):
