@@ -5,9 +5,11 @@ from typing import ClassVar
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from apps.common.validators.base import (
-    validate_future_date,
-    validate_positive_amount,
+from apps.profiles.validators import (
+    validate_bride_groom_names,
+    validate_venue_name,
+    validate_wedding_budget_structure,
+    validate_wedding_date_range,
 )
 
 from .models import WeddingProfile
@@ -41,15 +43,28 @@ class WeddingProfileSerializer(serializers.ModelSerializer):
         ]
 
     def validate_wedding_date(self, value):
-        """Validate wedding date is in the future."""
-        validate_future_date(value)
+        """Validate wedding date meets planning requirements."""
+        validate_wedding_date_range(value)
         return value
 
     def validate_budget(self, value):
-        """Validate budget is positive if provided."""
-        if value is not None:
-            validate_positive_amount(value)
+        """Validate budget meets wedding requirements."""
+        validate_wedding_budget_structure(value)
         return value
+
+    def validate_venue(self, value):
+        """Validate venue name format."""
+        if value:
+            validate_venue_name(value)
+        return value
+
+    def validate(self, attrs):
+        """Cross-field validation for bride and groom names."""
+        bride_name = attrs.get("bride_name")
+        groom_name = attrs.get("groom_name")
+        if bride_name and groom_name:
+            validate_bride_groom_names(bride_name, groom_name)
+        return attrs
 
 
 class WeddingProfileCreateSerializer(serializers.ModelSerializer):
@@ -68,15 +83,28 @@ class WeddingProfileCreateSerializer(serializers.ModelSerializer):
         ]
 
     def validate_wedding_date(self, value):
-        """Validate wedding date is in the future."""
-        validate_future_date(value)
+        """Validate wedding date meets planning requirements."""
+        validate_wedding_date_range(value)
         return value
 
     def validate_budget(self, value):
-        """Validate budget is positive if provided."""
-        if value is not None:
-            validate_positive_amount(value)
+        """Validate budget meets wedding requirements."""
+        validate_wedding_budget_structure(value)
         return value
+
+    def validate_venue(self, value):
+        """Validate venue name format."""
+        if value:
+            validate_venue_name(value)
+        return value
+
+    def validate(self, attrs):
+        """Cross-field validation for bride and groom names."""
+        bride_name = attrs.get("bride_name")
+        groom_name = attrs.get("groom_name")
+        if bride_name and groom_name:
+            validate_bride_groom_names(bride_name, groom_name)
+        return attrs
 
     def create(self, validated_data):
         """Create instance with auto-assignment."""

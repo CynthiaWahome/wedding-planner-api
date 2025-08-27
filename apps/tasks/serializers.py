@@ -5,6 +5,10 @@ from typing import ClassVar
 from rest_framework import serializers
 
 from apps.common.constants import TaskAssignment
+from apps.tasks.validators import (
+    validate_task_description,
+    validate_task_title,
+)
 
 from .models import Task
 
@@ -37,6 +41,16 @@ class TaskSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
+    def validate_title(self, value):
+        """Validate task title format."""
+        validate_task_title(value)
+        return value
+
+    def validate_description(self, value):
+        """Validate task description."""
+        validate_task_description(value)
+        return value
+
     def validate_assigned_to(self, value):
         """Validate assignment choice."""
         valid_choices = [choice[0] for choice in TaskAssignment.CHOICES]
@@ -55,6 +69,16 @@ class TaskCreateSerializer(serializers.ModelSerializer):
 
         model = Task
         fields: ClassVar = ["title", "description", "assigned_to", "vendor"]
+
+    def validate_title(self, value):
+        """Validate task title format."""
+        validate_task_title(value)
+        return value
+
+    def validate_description(self, value):
+        """Validate task description."""
+        validate_task_description(value)
+        return value
 
     def validate_assigned_to(self, value):
         """Validate assigned_to field."""

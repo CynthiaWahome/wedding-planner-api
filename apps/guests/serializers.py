@@ -4,7 +4,11 @@ from typing import ClassVar
 
 from rest_framework import serializers
 
-from apps.common.constants import RSVPStatus
+from apps.guests.validators import (
+    validate_guest_email_format,
+    validate_guest_name,
+    validate_rsvp_status,
+)
 
 from .models import Guest
 
@@ -33,13 +37,19 @@ class GuestSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
+    def validate_name(self, value):
+        """Validate guest name format."""
+        validate_guest_name(value)
+        return value
+
+    def validate_email(self, value):
+        """Validate guest email format."""
+        validate_guest_email_format(value)
+        return value
+
     def validate_rsvp_status(self, value):
         """Validate RSVP status choice."""
-        valid_choices = [choice[0] for choice in RSVPStatus.CHOICES]
-        if value not in valid_choices:
-            raise serializers.ValidationError(
-                f"Invalid choice. Must be one of: {valid_choices}"
-            )
+        validate_rsvp_status(value)
         return value
 
 
@@ -52,13 +62,19 @@ class GuestCreateSerializer(serializers.ModelSerializer):
         model = Guest
         fields: ClassVar = ["name", "email", "rsvp_status", "plus_one"]
 
+    def validate_name(self, value):
+        """Validate guest name format."""
+        validate_guest_name(value)
+        return value
+
+    def validate_email(self, value):
+        """Validate guest email format."""
+        validate_guest_email_format(value)
+        return value
+
     def validate_rsvp_status(self, value):
-        """Validate rsvp_status field."""
-        valid_choices = [choice[0] for choice in RSVPStatus.CHOICES]
-        if value not in valid_choices:
-            raise serializers.ValidationError(
-                f"Invalid choice. Must be one of: {valid_choices}"
-            )
+        """Validate RSVP status choice."""
+        validate_rsvp_status(value)
         return value
 
     def create(self, validated_data):

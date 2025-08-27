@@ -46,10 +46,10 @@ class TestConstants:
         assert VendorCategory.VENUE == "venue"
         assert VendorCategory.CATERING == "catering"
         assert VendorCategory.PHOTOGRAPHY == "photography"
-        assert VendorCategory.MUSIC == "music"
+        assert VendorCategory.MUSIC_DJ == "music_dj"
 
         choices = VendorCategory.CHOICES
-        assert len(choices) == 7
+        assert len(choices) == 16
         assert ("venue", "Venue") in choices
         assert ("catering", "Catering") in choices
         assert ("photography", "Photography") in choices
