@@ -182,7 +182,7 @@ class TestAuthenticationViews:
         }
         response = api_client.post(url, data)
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert response.data["success"] is False
 
     def test_login_success(self, api_client, test_user):
@@ -276,5 +276,5 @@ class TestAuthenticationViews:
 
         response = auth_client.put(url, data)
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert response.data["success"] is False

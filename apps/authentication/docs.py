@@ -1,0 +1,355 @@
+"""Authentication API documentation with DRY error responses."""
+
+from typing import Any
+
+from drf_spectacular.utils import (
+    OpenApiExample,
+    OpenApiResponse,
+    extend_schema,
+    extend_schema_serializer,
+)
+from rest_framework import serializers
+
+from apps.common.errors import (
+    COMMON_AUTH_ERRORS,
+    COMMON_CREATE_ERRORS,
+    COMMON_CRUD_ERRORS,
+)
+
+from .serializers import UserLoginSerializer, UserRegistrationSerializer, UserSerializer
+
+
+# Response serializers for documentation with examples
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "User Data Example",
+            summary="Grace Njeri Profile",
+            description="Example user profile data",
+            value={
+                "id": 3,
+                "username": "grace_njeri",
+                "email": "grace.njeri@gmail.com",
+                "first_name": "Grace",
+                "last_name": "Njeri",
+                "date_joined": "2024-08-15T09:45:00Z",
+            },
+        )
+    ]
+)
+class UserResponseDataSerializer(serializers.Serializer):
+    id = serializers.IntegerField(help_text="User ID")
+    username = serializers.CharField(help_text="Username")
+    email = serializers.EmailField(help_text="Email address")
+    first_name = serializers.CharField(help_text="First name")
+    last_name = serializers.CharField(help_text="Last name")
+    date_joined = serializers.DateTimeField(help_text="Date joined")
+
+
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "JWT Tokens Example",
+            summary="Authentication Tokens",
+            description="JWT access and refresh tokens",
+            value={
+                "access": "eyJhbGciOiJIUzI1NiJ9...access_token",
+                "refresh": "eyJhbGciOiJIUzI1NiJ9...refresh_token",
+            },
+        )
+    ]
+)
+class TokensSerializer(serializers.Serializer):
+    access = serializers.CharField(help_text="JWT access token")
+    refresh = serializers.CharField(help_text="JWT refresh token")
+
+
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Profile Update Success",
+            summary="Grace's Profile Updated",
+            description="Successfully updated user profile",
+            value={
+                "success": True,
+                "message": "Profile updated successfully",
+                "data": {
+                    "id": 3,
+                    "username": "grace_njeri",
+                    "email": "grace.wanjiku@gmail.com",
+                    "first_name": "Grace",
+                    "last_name": "Wanjiku",
+                    "date_joined": "2024-08-15T09:45:00Z",
+                },
+            },
+        )
+    ]
+)
+class StandardSuccessResponseSerializer(serializers.Serializer):
+    success = serializers.BooleanField(default=True, help_text="Success status")
+    message = serializers.CharField(help_text="Response message")
+    data: Any = serializers.JSONField(help_text="Response data")
+
+
+class LogoutRequestSerializer(serializers.Serializer):
+    """Simple logout request serializer for docs."""
+
+    refresh = serializers.CharField(help_text="JWT refresh token to blacklist")
+
+
+# Registration endpoint documentation
+register_docs = extend_schema(
+    tags=["Authentication"],
+    summary="User Registration",
+    description="Register a new user account for wedding planning",
+    request=UserRegistrationSerializer,
+    responses={
+        201: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            description="User registered successfully",
+            examples=[
+                OpenApiExample(
+                    "Registration Success",
+                    summary="Wanjiku Kamau Registration Success",
+                    value={
+                        "success": True,
+                        "message": "User registered successfully",
+                        "data": {
+                            "user": {
+                                "id": 1,
+                                "username": "wanjiku_kamau",
+                                "email": "wanjiku.kamau@gmail.com",
+                                "first_name": "Wanjiku",
+                                "last_name": "Kamau",
+                                "date_joined": "2024-08-26T10:30:00Z",
+                            },
+                            "tokens": {
+                                "access": "eyJhbGciOiJIUzI1NiJ9...wanjiku_access",
+                                "refresh": "eyJhbGciOiJIUzI1NiJ9...wanjiku_refresh",
+                            },
+                        },
+                    },
+                )
+            ],
+        ),
+        **COMMON_CREATE_ERRORS,  # DRY: Adds 400, 401, 403, 405, 422, 500
+    },
+    examples=[
+        OpenApiExample(
+            "Registration Request",
+            summary="Sample Kenyan user registration",
+            description="Example registration for Wanjiku from Nairobi",
+            value={
+                "username": "wanjiku_kamau",
+                "email": "wanjiku.kamau@gmail.com",
+                "first_name": "Wanjiku",
+                "last_name": "Kamau",
+                "password": "SecurePass123!",
+                "password_confirm": "SecurePass123!",
+            },
+            request_only=True,
+        )
+    ],
+)
+
+# Login endpoint documentation
+login_docs = extend_schema(
+    tags=["Authentication"],
+    summary="User Login",
+    description="Authenticate user and receive JWT tokens",
+    request=UserLoginSerializer,
+    responses={
+        200: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            description="Login successful",
+            examples=[
+                OpenApiExample(
+                    "Login Success",
+                    summary="James Mwangi Login Success",
+                    value={
+                        "success": True,
+                        "message": "Login successful",
+                        "data": {
+                            "user": {
+                                "id": 2,
+                                "username": "james_mwangi",
+                                "email": "james.mwangi@yahoo.com",
+                                "first_name": "James",
+                                "last_name": "Mwangi",
+                                "date_joined": "2024-08-20T14:20:00Z",
+                            },
+                            "tokens": {
+                                "access": "eyJhbGciOiJIUzI1NiJ9...james_access",
+                                "refresh": "eyJhbGciOiJIUzI1NiJ9...james_refresh",
+                            },
+                        },
+                    },
+                )
+            ],
+        ),
+        **COMMON_AUTH_ERRORS,  # DRY: Adds 401, 403, 405, 500
+    },
+    examples=[
+        OpenApiExample(
+            "Login Request",
+            summary="User login with credentials",
+            description="Login for James from Mombasa",
+            value={"username": "james_mwangi", "password": "MyPassword123!"},
+            request_only=True,
+        )
+    ],
+)
+
+# Profile update endpoint documentation
+profile_update_docs = extend_schema(
+    tags=["Authentication"],
+    summary="Update User Profile",
+    description="Update authenticated user profile with atomic transactions.",
+    request=UserSerializer,
+    responses={
+        200: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            description="Profile updated successfully",
+            examples=[
+                OpenApiExample(
+                    "Profile Updated",
+                    summary="Grace's profile updated to married name",
+                    description="User successfully updated profile information",
+                    value={
+                        "success": True,
+                        "message": "Profile updated successfully",
+                        "data": {
+                            "id": 3,
+                            "username": "grace_njeri",
+                            "email": "grace.wanjiku@gmail.com",
+                            "first_name": "Grace",
+                            "last_name": "Wanjiku",
+                            "date_joined": "2024-08-15T09:45:00Z",
+                        },
+                    },
+                )
+            ],
+        ),
+        **COMMON_CRUD_ERRORS,  # DRY: Adds 400, 401, 403, 404, 405, 422, 500
+    },
+    examples=[
+        OpenApiExample(
+            "Profile Update Request",
+            summary="Grace updates to married name",
+            description="Example showing partial profile update with new married name",
+            value={
+                "email": "grace.wanjiku@gmail.com",
+                "first_name": "Grace",
+                "last_name": "Wanjiku",
+            },
+            request_only=True,
+        )
+    ],
+)
+
+# Profile get documentation
+profile_get_docs = extend_schema(
+    tags=["Authentication"],
+    summary="Get User Profile",
+    description="Retrieve current authenticated user's profile information",
+    responses={
+        200: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            description="Profile retrieved successfully",
+            examples=[
+                OpenApiExample(
+                    "Profile Retrieved",
+                    summary="Grace Njeri's profile information",
+                    value={
+                        "success": True,
+                        "message": "Profile retrieved successfully",
+                        "data": {
+                            "id": 3,
+                            "username": "grace_njeri",
+                            "email": "grace.njeri@gmail.com",
+                            "first_name": "Grace",
+                            "last_name": "Njeri",
+                            "date_joined": "2024-08-15T09:45:00Z",
+                        },
+                    },
+                )
+            ],
+        ),
+        **COMMON_AUTH_ERRORS,  # DRY: Adds 401, 403, 405, 500
+    },
+)
+
+# Logout documentation
+logout_docs = extend_schema(
+    tags=["Authentication"],
+    summary="User Logout",
+    description="Logout user by blacklisting refresh token to prevent reuse",
+    request=LogoutRequestSerializer,
+    responses={
+        200: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            description="Logout successful",
+            examples=[
+                OpenApiExample(
+                    "Logout Success",
+                    summary="User successfully logged out",
+                    value={
+                        "success": True,
+                        "message": "Logout successful",
+                        "data": None,
+                    },
+                )
+            ],
+        ),
+        **COMMON_AUTH_ERRORS,  # DRY: Adds 401, 403, 405, 500
+    },
+    examples=[
+        OpenApiExample(
+            "Logout Request",
+            summary="Blacklist refresh token for Grace",
+            description="Provide refresh token to logout user gracefully",
+            value={"refresh": "eyJhbGciOiJIUzI1NiJ9...grace_logout"},
+            request_only=True,
+        )
+    ],
+)
+
+# Token refresh endpoint documentation
+token_refresh_docs = extend_schema(
+    tags=["Authentication"],
+    summary="Refresh JWT Token",
+    description="Takes a refresh token and returns a new access token",
+    request=LogoutRequestSerializer,
+    responses={
+        200: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            description="Token refreshed successfully",
+            examples=[
+                OpenApiExample(
+                    "Token Refresh Success",
+                    summary="James Mwangi token refreshed",
+                    value={
+                        "success": True,
+                        "message": "Token refreshed successfully",
+                        "data": {
+                            "tokens": {
+                                "access": "eyJhbGciOiJIUzI1NiJ9...new_james_access",
+                                "refresh": "eyJhbGciOiJIUzI1NiJ9...new_james_refresh",
+                            }
+                        },
+                    },
+                )
+            ],
+        ),
+        **COMMON_AUTH_ERRORS,  # DRY: Adds 401, 403, 500
+    },
+    examples=[
+        OpenApiExample(
+            "Token Refresh Request",
+            summary="Refresh token for James Mwangi",
+            description="Provide existing refresh token to get new access token",
+            value={"refresh": "eyJhbGciOiJIUzI1NiJ9...james_refresh"},
+            request_only=True,
+        )
+    ],
+)
