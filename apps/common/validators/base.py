@@ -50,5 +50,6 @@ def validate_kenyan_phone_number(phone_number):
 
     if not any(re.match(pattern, cleaned_number) for pattern in kenyan_patterns):
         raise ValidationError(
-            "Enter a valid Kenyan phone number (e.g., +254712345678, 0712345678, or 712345678)."
+            "Enter a valid Kenyan phone number "
+            "(e.g., +254712345678, 0712345678, or 712345678)."
         )

@@ -57,8 +57,8 @@ class TestUserRegistrationSerializer:
             "email": "new@example.com",
             "first_name": "New",
             "last_name": "User",
-            "password": "strongpass123",
-            "password_confirm": "strongpass123",
+            "password": "StrongPass123!",
+            "password_confirm": "StrongPass123!",
         }
         serializer = UserRegistrationSerializer(data=data)
         assert serializer.is_valid()
@@ -66,14 +66,14 @@ class TestUserRegistrationSerializer:
         user = serializer.save()
         assert user.username == "newuser"
         assert user.email == "new@example.com"
-        assert user.check_password("strongpass123")
+        assert user.check_password("StrongPass123!")
 
     def test_password_mismatch(self):
         """Test password confirmation mismatch."""
         data = {
             "username": "newuser",
             "email": "new@example.com",
-            "password": "strongpass123",
+            "password": "StrongPass123!",
             "password_confirm": "differentpass",
         }
         serializer = UserRegistrationSerializer(data=data)
@@ -157,8 +157,8 @@ class TestAuthenticationViews:
             "email": "new@example.com",
             "first_name": "New",
             "last_name": "User",
-            "password": "strongpass123",
-            "password_confirm": "strongpass123",
+            "password": "StrongPass123!",
+            "password_confirm": "StrongPass123!",
         }
         response = api_client.post(url, data)
 
@@ -182,7 +182,7 @@ class TestAuthenticationViews:
         }
         response = api_client.post(url, data)
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert response.data["success"] is False
 
     def test_login_success(self, api_client, test_user):
@@ -276,5 +276,5 @@ class TestAuthenticationViews:
 
         response = auth_client.put(url, data)
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert response.data["success"] is False

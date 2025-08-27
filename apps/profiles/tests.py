@@ -126,7 +126,7 @@ class TestWeddingProfileSerializer:
 
     def test_validate_budget_positive(self):
         """Test budget validation for positive amount."""
-        positive_amount = Decimal("15000.00")
+        positive_amount = Decimal("60000.00")
         serializer = WeddingProfileSerializer()
 
         # Should not raise any exception
@@ -161,7 +161,7 @@ class TestWeddingProfileCreateSerializer:
             "bride_name": "Lisa Green",
             "groom_name": "Tom White",
             "venue": "Beach Resort",
-            "budget": "30000.00",
+            "budget": "75000.00",
         }
 
         serializer = WeddingProfileCreateSerializer(data=data)

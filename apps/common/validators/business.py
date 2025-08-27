@@ -4,8 +4,9 @@ Contains validation logic that spans multiple apps or represents
 core business rules for the wedding planning domain.
 """
 
+from datetime import timedelta
+
 from django.core.exceptions import ValidationError
-from django.utils import timezone
 
 
 def validate_guest_count_limit(guest_count, venue_capacity=None):
@@ -26,7 +27,8 @@ def validate_budget_allocation(total_budget, allocated_amount):
     """Validate allocated amount doesn't exceed total budget."""
     if allocated_amount > total_budget:
         raise ValidationError(
-            f"Allocated amount ({allocated_amount}) cannot exceed total budget ({total_budget})."
+            f"Allocated amount ({allocated_amount}) cannot exceed "
+            f"total budget ({total_budget})."
         )
 
 
@@ -51,7 +53,7 @@ def validate_rsvp_deadline(wedding_date, rsvp_deadline):
         raise ValidationError("RSVP deadline must be before the wedding date.")
 
     # RSVP should be at least 1 week before wedding
-    one_week_before = wedding_date - timezone.timedelta(days=7)
+    one_week_before = wedding_date - timedelta(days=7)
     if rsvp_deadline > one_week_before:
         raise ValidationError("RSVP deadline should be at least 1 week before wedding.")
 

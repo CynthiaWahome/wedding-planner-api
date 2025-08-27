@@ -5,52 +5,34 @@ login, logout, and profile management.
 """
 
 from django.contrib.auth import get_user_model
-from rest_framework import status
+from django.db import transaction
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenRefreshView as BaseTokenRefreshView
 
+from apps.common.errors import StandardErrors
 from apps.common.responses import APIResponse
 
+from .docs import (
+    login_docs,
+    logout_docs,
+    profile_get_docs,
+    profile_update_docs,
+    register_docs,
+    token_refresh_docs,
+)
 from .serializers import UserLoginSerializer, UserRegistrationSerializer, UserSerializer
 
 User = get_user_model()
 
 
+@register_docs
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def register(request):
-    """Register a new user account.
-
-    Creates a new user with JWT tokens for immediate login.
-
-    **Request Body:**
-    ```json
-    {
-        "username": "johndoe",
-        "email": "john@example.com",
-        "first_name": "John",
-        "last_name": "Doe",
-        "password": "securepassword123",
-        "password_confirm": "securepassword123"
-    }
-    ```
-
-    **Response:**
-    ```json
-    {
-        "success": true,
-        "message": "User registered successfully",
-        "data": {
-            "user": {...},
-            "tokens": {
-                "access": "jwt_access_token",
-                "refresh": "jwt_refresh_token"
-            }
-        }
-    }
-    ```
-    """
+    """Register a new user account with JWT tokens for immediate login."""
     serializer = UserRegistrationSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
@@ -67,41 +49,16 @@ def register(request):
             message="User registered successfully",
         )
 
-    return APIResponse.error(
-        errors=list(serializer.errors.values()),
-        message="Registration failed",
-        status_code=status.HTTP_400_BAD_REQUEST,
+    return StandardErrors.validation_error(
+        errors=list(serializer.errors.values()), message="Registration failed"
     )
 
 
+@login_docs
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def login(request):
-    """Authenticate user and return JWT tokens.
-
-    **Request Body:**
-    ```json
-    {
-        "username": "johndoe",
-        "password": "securepassword123"
-    }
-    ```
-
-    **Response:**
-    ```json
-    {
-        "success": true,
-        "message": "Login successful",
-        "data": {
-            "user": {...},
-            "tokens": {
-                "access": "jwt_access_token",
-                "refresh": "jwt_refresh_token"
-            }
-        }
-    }
-    ```
-    """
+    """Authenticate user and return JWT tokens."""
     serializer = UserLoginSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.validated_data["user"]
@@ -118,99 +75,45 @@ def login(request):
             message="Login successful",
         )
 
-    return APIResponse.unauthorized(message="Invalid credentials")
+    return StandardErrors.unauthorized(message="Invalid credentials")
 
 
+@logout_docs
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def logout(request):
-    """Logout user by blacklisting the refresh token.
-
-    **Request Body:**
-    ```json
-    {
-        "refresh": "jwt_refresh_token"
-    }
-    ```
-
-    **Response:**
-    ```json
-    {
-        "success": true,
-        "message": "Logout successful"
-    }
-    ```
-    """
+    """Logout user by blacklisting the refresh token."""
     try:
         refresh_token = request.data.get("refresh")
         if not refresh_token:
-            return APIResponse.error(message="Refresh token required")
+            return StandardErrors.bad_request(message="Refresh token required")
 
         token = RefreshToken(refresh_token)
         token.blacklist()
         return APIResponse.success(message="Logout successful")
     except Exception:
-        return APIResponse.error(
-            message="Logout failed - invalid refresh token",
-            status_code=status.HTTP_400_BAD_REQUEST,
+        return StandardErrors.bad_request(
+            message="Logout failed - invalid refresh token"
         )
 
 
+@profile_get_docs
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def profile(request):
-    """Get current authenticated user's profile information.
-
-    **Headers:**
-    ```
-    Authorization: Bearer <access_token>
-    ```
-
-    **Response:**
-    ```json
-    {
-        "success": true,
-        "message": "Profile retrieved successfully",
-        "data": {
-            "id": 1,
-            "username": "johndoe",
-            "email": "john@example.com",
-            "first_name": "John",
-            "last_name": "Doe",
-            "date_joined": "2024-08-25T10:30:00Z"
-        }
-    }
-    ```
-    """
+    """Get current authenticated user's profile information."""
     serializer = UserSerializer(request.user)
     return APIResponse.success(
         data=serializer.data, message="Profile retrieved successfully"
     )
 
 
+@profile_update_docs
 @api_view(["PUT", "PATCH"])
 @permission_classes([IsAuthenticated])
+@transaction.atomic
 def update_profile(request):
-    """Update current user's profile information.
-
-    **Request Body (PUT - all fields required, PATCH - partial update):**
-    ```json
-    {
-        "email": "newemail@example.com",
-        "first_name": "UpdatedName",
-        "last_name": "UpdatedLastName"
-    }
-    ```
-
-    **Response:**
-    ```json
-    {
-        "success": true,
-        "message": "Profile updated successfully",
-        "data": {...}
-    }
-    ```
-    """
+    """Update current user's profile with atomic transaction support."""
     partial = request.method == "PATCH"
     serializer = UserSerializer(request.user, data=request.data, partial=partial)
 
@@ -220,8 +123,30 @@ def update_profile(request):
             data=serializer.data, message="Profile updated successfully"
         )
 
-    return APIResponse.error(
-        errors=list(serializer.errors.values()),
-        message="Profile update failed",
-        status_code=status.HTTP_400_BAD_REQUEST,
+    return StandardErrors.validation_error(
+        errors=list(serializer.errors.values()), message="Profile update failed"
     )
+
+
+class TokenRefreshView(BaseTokenRefreshView):
+    """Custom token refresh view that matches our standardized API response format."""
+
+    @token_refresh_docs
+    def post(self, request, *args, **kwargs):
+        """Refresh JWT token and return in standardized format."""
+        serializer = TokenRefreshSerializer(data=request.data)
+
+        if serializer.is_valid():
+            return APIResponse.success(
+                data={
+                    "tokens": {
+                        "access": serializer.validated_data["access"],
+                        "refresh": serializer.validated_data.get("refresh"),
+                    }
+                },
+                message="Token refreshed successfully",
+            )
+
+        return StandardErrors.bad_request(
+            message="Token refresh failed", errors=list(serializer.errors.values())
+        )

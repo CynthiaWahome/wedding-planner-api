@@ -6,13 +6,21 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
+from .validators import (
+    validate_password_strength,
+    validate_unique_email,
+    validate_unique_username,
+)
+
 User = get_user_model()
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     """Serializer for user registration."""
 
-    password = serializers.CharField(write_only=True, validators=[validate_password])
+    password = serializers.CharField(
+        write_only=True, validators=[validate_password, validate_password_strength]
+    )
     password_confirm = serializers.CharField(write_only=True)
 
     class Meta:
@@ -27,6 +35,16 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "password",
             "password_confirm",
         ]
+
+    def validate_username(self, value):
+        """Validate username is unique."""
+        validate_unique_username(value)
+        return value
+
+    def validate_email(self, value):
+        """Validate email is unique."""
+        validate_unique_email(value)
+        return value
 
     def validate(self, attrs):
         """Validate password confirmation."""
