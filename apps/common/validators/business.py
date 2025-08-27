@@ -39,7 +39,6 @@ def validate_wedding_timeline(wedding_date, event_date, event_name="event"):
             f"{event_name} cannot be scheduled after the wedding date."
         )
 
-    # Events shouldn't be more than 2 years before wedding
     two_years_before = wedding_date.replace(year=wedding_date.year - 2)
     if event_date < two_years_before:
         raise ValidationError(
@@ -52,7 +51,6 @@ def validate_rsvp_deadline(wedding_date, rsvp_deadline):
     if rsvp_deadline >= wedding_date:
         raise ValidationError("RSVP deadline must be before the wedding date.")
 
-    # RSVP should be at least 1 week before wedding
     one_week_before = wedding_date - timedelta(days=7)
     if rsvp_deadline > one_week_before:
         raise ValidationError("RSVP deadline should be at least 1 week before wedding.")
@@ -61,7 +59,6 @@ def validate_rsvp_deadline(wedding_date, rsvp_deadline):
 def validate_vendor_service_date(wedding_date, service_date, vendor_type):
     """Validate vendor service date aligns with wedding plans."""
     if service_date != wedding_date:
-        # Some vendors might provide services on different days (like rehearsal dinner)
         days_diff = abs((service_date - wedding_date).days)
         if days_diff > 7:
             raise ValidationError(

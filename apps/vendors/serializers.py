@@ -102,7 +102,6 @@ class VendorCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create instance with auto-assignment."""
-        # Auto-assign to user's wedding profile
         user = self.context["request"].user
         validated_data["wedding_profile"] = user.wedding_profile
         return super().create(validated_data)
