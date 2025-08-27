@@ -38,28 +38,10 @@ def validate_vendor_name(vendor_name):
 
 def validate_vendor_category(category):
     """Validate vendor service category."""
-    valid_categories = [
-        VendorCategory.CATERING,
-        VendorCategory.PHOTOGRAPHY,
-        VendorCategory.VIDEOGRAPHY,
-        VendorCategory.MUSIC_DJ,
-        VendorCategory.LIVE_BAND,
-        VendorCategory.FLOWERS,
-        VendorCategory.DECORATIONS,
-        VendorCategory.VENUE,
-        VendorCategory.TRANSPORTATION,
-        VendorCategory.BEAUTY,
-        VendorCategory.ATTIRE,
-        VendorCategory.JEWELRY,
-        VendorCategory.STATIONERY,
-        VendorCategory.CAKE,
-        VendorCategory.PLANNING,
-        VendorCategory.OTHER,
-    ]
-
-    if category not in valid_categories:
+    if category not in VendorCategory.VALID_CHOICES:
         raise ValidationError(
-            f"Vendor category must be one of: {', '.join(valid_categories)}."
+            f"Vendor category must be one of: "
+            f"{', '.join(VendorCategory.VALID_CHOICES)}."
         )
 
 
@@ -91,7 +73,7 @@ def validate_vendor_contact_info(contact_info_type, contact_value):
 def validate_vendor_rating(rating):
     """Validate vendor rating value."""
     if rating is None:
-        return  # Rating is optional
+        return
 
     if not isinstance(rating, int | float):
         raise ValidationError("Vendor rating must be a number.")
@@ -103,7 +85,7 @@ def validate_vendor_rating(rating):
 def validate_service_cost(cost, cost_type="fixed"):
     """Validate vendor service cost."""
     if cost is None:
-        return  # Cost is optional (for inquiry stage)
+        return
 
     validate_positive_amount(cost)
 
@@ -128,7 +110,7 @@ def validate_service_cost(cost, cost_type="fixed"):
 def validate_contract_terms(terms):
     """Validate vendor contract terms content."""
     if terms is None or terms == "":
-        return  # Contract terms are optional
+        return
 
     terms = terms.strip()
 
@@ -149,7 +131,7 @@ def validate_contract_terms(terms):
 def validate_vendor_availability_date(availability_date, wedding_date=None):
     """Validate vendor availability date."""
     if availability_date is None:
-        return  # Availability date is optional
+        return
 
     from datetime import timedelta
 
@@ -173,7 +155,7 @@ def validate_vendor_availability_date(availability_date, wedding_date=None):
 def validate_vendor_service_description(description):
     """Validate vendor service description."""
     if description is None or description == "":
-        return  # Service description is optional
+        return
 
     description = description.strip()
 
@@ -193,15 +175,7 @@ def validate_vendor_service_description(description):
 
 def validate_vendor_payment_terms(payment_terms):
     """Validate vendor payment terms."""
-    valid_terms = [
-        PaymentTerms.FULL_UPFRONT,
-        PaymentTerms.DEPOSIT_50,
-        PaymentTerms.DEPOSIT_30,
-        PaymentTerms.INSTALLMENTS,
-        PaymentTerms.PAYMENT_ON_DELIVERY,
-        PaymentTerms.NET_30,
-        PaymentTerms.CUSTOM,
-    ]
+    valid_terms = [choice[0] for choice in PaymentTerms.CHOICES]
 
     if payment_terms not in valid_terms:
         raise ValidationError(

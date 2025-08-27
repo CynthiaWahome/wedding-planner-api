@@ -6,7 +6,7 @@ from drf_spectacular.utils import extend_schema
 from apps.common.errors import get_error_documentation
 from apps.common.serializers import StandardSuccessResponseSerializer
 
-from .serializers import GuestCreateSerializer, GuestSerializer
+from .serializers import GuestCreateSerializer
 
 COMMON_GUEST_ERRORS = {
     **get_error_documentation(400),
@@ -32,9 +32,9 @@ guest_list_docs = extend_schema(
                         "data": [
                             {
                                 "id": 1,
-                                "wedding_profile": "wanjiku.kamau@gmail.com",
-                                "name": "Mary Wanjiku",
-                                "email": "mary.wanjiku@gmail.com",
+                                "wedding_profile": "aisha.vincent@gmail.com",
+                                "name": "Khadija Ali",
+                                "email": "khadija.ali@gmail.com",
                                 "rsvp_status": "confirmed",
                                 "plus_one": True,
                                 "created_at": "2025-08-26T12:00:00.123456Z",
@@ -42,9 +42,9 @@ guest_list_docs = extend_schema(
                             },
                             {
                                 "id": 2,
-                                "wedding_profile": "wanjiku.kamau@gmail.com",
-                                "name": "John Kamau",
-                                "email": "john.kamau@yahoo.com",
+                                "wedding_profile": "aisha.vincent@gmail.com",
+                                "name": "Kiprotich Cheruiyot",
+                                "email": "kiprotich.cheruiyot@yahoo.com",
                                 "rsvp_status": "invited",
                                 "plus_one": False,
                                 "created_at": "2025-08-26T12:15:30.789123Z",
@@ -64,6 +64,18 @@ guest_create_docs = extend_schema(
     summary="Create wedding guest",
     description="Add a new guest to the wedding guest list",
     request=GuestCreateSerializer,
+    examples=[
+        OpenApiExample(
+            name="Create Guest Request",
+            value={
+                "name": "Lomuria Lokol",
+                "email": "lomuria.lokol@gmail.com",
+                "rsvp_status": "invited",
+                "plus_one": True,
+            },
+            request_only=True,
+        )
+    ],
     responses={
         201: OpenApiResponse(
             response=StandardSuccessResponseSerializer,
@@ -106,7 +118,7 @@ guest_retrieve_docs = extend_schema(
                         "message": "Wedding guest retrieved successfully",
                         "data": {
                             "id": 1,
-                            "wedding_profile": "wanjiku.kamau@gmail.com",
+                            "wedding_profile": "aisha.vincent@gmail.com",
                             "name": "Mary Wanjiku",
                             "email": "mary.wanjiku@gmail.com",
                             "rsvp_status": "confirmed",
@@ -140,7 +152,19 @@ guest_retrieve_docs = extend_schema(
 guest_update_docs = extend_schema(
     summary="Update wedding guest",
     description="Update wedding guest details",
-    request=GuestSerializer,
+    request=GuestCreateSerializer,
+    examples=[
+        OpenApiExample(
+            name="Update Guest Request",
+            value={
+                "name": "Khadija Ali",
+                "email": "khadija.ali.updated@gmail.com",
+                "rsvp_status": "confirmed",
+                "plus_one": False,
+            },
+            request_only=True,
+        )
+    ],
     responses={
         200: OpenApiResponse(
             response=StandardSuccessResponseSerializer,
@@ -152,7 +176,7 @@ guest_update_docs = extend_schema(
                         "message": "Wedding guest updated successfully",
                         "data": {
                             "id": 1,
-                            "wedding_profile": "wanjiku.kamau@gmail.com",
+                            "wedding_profile": "aisha.vincent@gmail.com",
                             "name": "Mary Wanjiku",
                             "email": "mary.wanjiku.new@gmail.com",
                             "rsvp_status": "confirmed",
@@ -211,6 +235,63 @@ guest_delete_docs = extend_schema(
                         "message": "Wedding guest not found",
                         "data": None,
                         "errors": {"detail": "Wedding guest not found"},
+                    },
+                )
+            ],
+        ),
+        **COMMON_GUEST_ERRORS,
+    },
+)
+
+
+guest_rsvp_update_docs = extend_schema(
+    summary="Update guest RSVP status",
+    description="Update a specific guest's RSVP status",
+    responses={
+        200: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            examples=[
+                OpenApiExample(
+                    name="RSVP Updated",
+                    value={
+                        "success": True,
+                        "message": "RSVP status updated successfully",
+                        "data": {
+                            "id": 1,
+                            "name": "Maryam Sheikh",
+                            "rsvp_status": "confirmed",
+                            "updated_at": "2024-08-25T12:30:00Z",
+                        },
+                    },
+                )
+            ],
+        ),
+        **COMMON_GUEST_ERRORS,
+    },
+)
+
+
+guest_statistics_docs = extend_schema(
+    summary="Get guest statistics",
+    description="Retrieve wedding guest statistics and metrics",
+    responses={
+        200: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            examples=[
+                OpenApiExample(
+                    name="Guest Statistics",
+                    value={
+                        "success": True,
+                        "message": "Guest statistics retrieved successfully",
+                        "data": {
+                            "total_guests": 150,
+                            "confirmed": 120,
+                            "declined": 15,
+                            "pending": 10,
+                            "maybe": 5,
+                            "plus_ones": 45,
+                            "confirmation_rate": 80.0,
+                        },
                     },
                 )
             ],

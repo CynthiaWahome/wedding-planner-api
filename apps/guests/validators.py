@@ -37,7 +37,7 @@ def validate_guest_name(name):
 def validate_guest_email_format(email):
     """Validate guest email format if provided."""
     if email is None or email == "":
-        return  # Email is optional for guests
+        return
 
     email = email.strip()
 
@@ -62,7 +62,7 @@ def validate_rsvp_status(status):
 def validate_dietary_restrictions(restrictions):
     """Validate dietary restrictions content."""
     if restrictions is None or restrictions == "":
-        return  # Dietary restrictions are optional
+        return
 
     restrictions = restrictions.strip()
 
@@ -78,7 +78,7 @@ def validate_dietary_restrictions(restrictions):
 def validate_guest_contact_info(phone_number):
     """Validate guest contact information."""
     if phone_number is None or phone_number == "":
-        return  # Phone number is optional for guests
+        return
 
     validate_kenyan_phone_number(phone_number)
 
@@ -96,7 +96,7 @@ def validate_plus_one_eligibility(guest_type, plus_one_allowed):
 def validate_guest_table_assignment(table_number, max_tables=50):
     """Validate guest table assignment."""
     if table_number is None:
-        return  # Table assignment is optional
+        return
 
     if table_number < 1:
         raise ValidationError("Table number must be at least 1.")

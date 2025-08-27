@@ -6,7 +6,7 @@ from drf_spectacular.utils import extend_schema
 from apps.common.errors import get_error_documentation
 from apps.common.serializers import StandardSuccessResponseSerializer
 
-from .serializers import TaskCreateSerializer, TaskSerializer
+from .serializers import TaskCreateSerializer
 
 COMMON_TASK_ERRORS = {
     **get_error_documentation(400),
@@ -32,20 +32,20 @@ task_list_docs = extend_schema(
                         "data": [
                             {
                                 "id": 1,
-                                "wedding_profile": "wanjiku.kamau@gmail.com",
-                                "title": "Book Safari Park Hotel for Reception",
-                                "description": "Book Safari Park Hotel venue",
-                                "assigned_to": "couple",
+                                "wedding_profile": "aisha.vincent@gmail.com",
+                                "title": "Book traditional Pokomo drums",
+                                "description": "Find Pokomo drummers for ceremonies!",
+                                "assigned_to": "groom",
                                 "is_completed": True,
-                                "vendor": "Safari Park Hotel",
+                                "vendor": "Tana River Cultural Group",
                                 "created_at": "2025-08-26T16:00:00.123456Z",
                                 "updated_at": "2025-08-26T18:30:45.654321Z",
                             },
                             {
                                 "id": 2,
-                                "wedding_profile": "wanjiku.kamau@gmail.com",
-                                "title": "Choose Wedding Gown",
-                                "description": "Visit Westgate Mall for gown selection",
+                                "wedding_profile": "aisha.vincent@gmail.com",
+                                "title": "Design Kamba beadwork accessories",
+                                "description": "Commission custom Kamba beadwork",
                                 "assigned_to": "bride",
                                 "is_completed": False,
                                 "vendor": None,
@@ -66,6 +66,18 @@ task_create_docs = extend_schema(
     summary="Create wedding task",
     description="Create a new wedding task for the authenticated user",
     request=TaskCreateSerializer,
+    examples=[
+        OpenApiExample(
+            name="Create Task Request",
+            value={
+                "title": "Book Marula Studios for Photography",
+                "description": "Contact Marula Studios for photography services",
+                "assigned_to": "couple",
+                "vendor": "Marula Studios",
+            },
+            request_only=True,
+        )
+    ],
     responses={
         201: OpenApiResponse(
             response=StandardSuccessResponseSerializer,
@@ -109,7 +121,7 @@ task_retrieve_docs = extend_schema(
                         "message": "Wedding task retrieved successfully",
                         "data": {
                             "id": 1,
-                            "wedding_profile": "wanjiku.kamau@gmail.com",
+                            "wedding_profile": "aisha.vincent@gmail.com",
                             "title": "Book Safari Park Hotel for Reception",
                             "description": "Book Safari Park Hotel venue",
                             "assigned_to": "couple",
@@ -144,7 +156,20 @@ task_retrieve_docs = extend_schema(
 task_update_docs = extend_schema(
     summary="Update wedding task",
     description="Update wedding task details",
-    request=TaskSerializer,
+    request=TaskCreateSerializer,
+    examples=[
+        OpenApiExample(
+            name="Update Task Request",
+            value={
+                "title": "Book Safari Park Hotel for Reception & Dinner",
+                "description": "Book venue and dinner service",
+                "assigned_to": "couple",
+                "is_completed": True,
+                "vendor": "Safari Park Hotel",
+            },
+            request_only=True,
+        )
+    ],
     responses={
         200: OpenApiResponse(
             response=StandardSuccessResponseSerializer,
@@ -156,7 +181,7 @@ task_update_docs = extend_schema(
                         "message": "Wedding task updated successfully",
                         "data": {
                             "id": 1,
-                            "wedding_profile": "wanjiku.kamau@gmail.com",
+                            "wedding_profile": "aisha.vincent@gmail.com",
                             "title": "Book Safari Park Hotel for Reception & Dinner",
                             "description": "Book venue and dinner service",
                             "assigned_to": "couple",
@@ -201,6 +226,53 @@ task_delete_docs = extend_schema(
                         "success": True,
                         "message": "Wedding task deleted successfully",
                         "data": None,
+                        "errors": None,
+                    },
+                )
+            ],
+        ),
+        404: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            examples=[
+                OpenApiExample(
+                    name="Not Found",
+                    value={
+                        "success": False,
+                        "message": "Wedding task not found",
+                        "data": None,
+                        "errors": {"detail": "Wedding task not found"},
+                    },
+                )
+            ],
+        ),
+        **COMMON_TASK_ERRORS,
+    },
+)
+
+
+task_toggle_docs = extend_schema(
+    summary="Toggle task completion",
+    description="Toggle the completion status of a task",
+    responses={
+        200: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            examples=[
+                OpenApiExample(
+                    name="Task Toggled",
+                    value={
+                        "success": True,
+                        "message": "Task completion toggled successfully",
+                        "data": {
+                            "id": 1,
+                            "wedding_profile": "aisha.vincent@gmail.com",
+                            "title": "Book traditional Pokomo drums",
+                            "description": "Find Pokomo drummers for ceremonies!",
+                            "assigned_to": "groom",
+                            "is_completed": True,
+                            "vendor": "Tana River Cultural Group",
+                            "created_at": "2025-08-26T16:00:00.123456Z",
+                            "updated_at": "2025-08-26T20:45:30.987654Z",
+                        },
                         "errors": None,
                     },
                 )

@@ -7,7 +7,6 @@ from rest_framework import serializers, status
 
 from .responses import APIResponse
 
-# SINGLE SOURCE OF TRUTH for all error examples
 ERROR_TEMPLATES = {
     400: {
         "message": "Bad Request - Invalid data format",
@@ -114,7 +113,6 @@ class StandardErrors:
         )
 
 
-# Error response serializer for documentation
 class ErrorResponseSerializer(serializers.Serializer):
     success = serializers.BooleanField(
         default=False, help_text="Always false for errors"
@@ -128,7 +126,6 @@ class ErrorResponseSerializer(serializers.Serializer):
     )
 
 
-# DOCUMENTATION RESPONSES - Uses same templates as runtime
 def get_error_documentation(
     status_code: int,
     custom_message: str | None = None,
@@ -159,7 +156,6 @@ def get_error_documentation(
     }
 
 
-# PRE-BUILT ERROR SETS for common endpoint patterns
 COMMON_AUTH_ERRORS = {
     **get_error_documentation(401),
     **get_error_documentation(403),

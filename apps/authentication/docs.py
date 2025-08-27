@@ -19,7 +19,6 @@ from apps.common.errors import (
 from .serializers import UserLoginSerializer, UserRegistrationSerializer, UserSerializer
 
 
-# Response serializers for documentation with examples
 @extend_schema_serializer(
     examples=[
         OpenApiExample(
@@ -96,8 +95,40 @@ class LogoutRequestSerializer(serializers.Serializer):
 
     refresh = serializers.CharField(help_text="JWT refresh token to blacklist")
 
+    class Meta:
+        """Meta configuration for logout request."""
 
-# Registration endpoint documentation
+        swagger_schema_fields = {
+            "example": {"refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example"}
+        }
+
+
+class TokenRefreshRequestSerializer(serializers.Serializer):
+    """Token refresh request serializer for docs."""
+
+    refresh = serializers.CharField(help_text="JWT refresh token")
+
+    class Meta:
+        """Meta configuration for token refresh request."""
+
+        swagger_schema_fields = {
+            "example": {"refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example"}
+        }
+
+
+class TokenRefreshResponseSerializer(serializers.Serializer):
+    """Token refresh response serializer for docs."""
+
+    access = serializers.CharField(help_text="New JWT access token")
+
+    class Meta:
+        """Meta configuration for token refresh response."""
+
+        swagger_schema_fields = {
+            "example": {"access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example"}
+        }
+
+
 register_docs = extend_schema(
     tags=["Authentication"],
     summary="User Registration",
@@ -118,7 +149,7 @@ register_docs = extend_schema(
                             "user": {
                                 "id": 1,
                                 "username": "wanjiku_kamau",
-                                "email": "wanjiku.kamau@gmail.com",
+                                "email": "aisha.vincent@gmail.com",
                                 "first_name": "Wanjiku",
                                 "last_name": "Kamau",
                                 "date_joined": "2024-08-26T10:30:00Z",
@@ -132,7 +163,7 @@ register_docs = extend_schema(
                 )
             ],
         ),
-        **COMMON_CREATE_ERRORS,  # DRY: Adds 400, 401, 403, 405, 422, 500
+        **COMMON_CREATE_ERRORS,
     },
     examples=[
         OpenApiExample(
@@ -141,7 +172,7 @@ register_docs = extend_schema(
             description="Example registration for Wanjiku from Nairobi",
             value={
                 "username": "wanjiku_kamau",
-                "email": "wanjiku.kamau@gmail.com",
+                "email": "aisha.vincent@gmail.com",
                 "first_name": "Wanjiku",
                 "last_name": "Kamau",
                 "password": "SecurePass123!",
@@ -152,7 +183,6 @@ register_docs = extend_schema(
     ],
 )
 
-# Login endpoint documentation
 login_docs = extend_schema(
     tags=["Authentication"],
     summary="User Login",
@@ -165,14 +195,14 @@ login_docs = extend_schema(
             examples=[
                 OpenApiExample(
                     "Login Success",
-                    summary="James Mwangi Login Success",
+                    summary="Vincent Simiyu Login Success",
                     value={
                         "success": True,
                         "message": "Login successful",
                         "data": {
                             "user": {
                                 "id": 2,
-                                "username": "james_mwangi",
+                                "username": "vincent_simiyu",
                                 "email": "james.mwangi@yahoo.com",
                                 "first_name": "James",
                                 "last_name": "Mwangi",
@@ -187,20 +217,19 @@ login_docs = extend_schema(
                 )
             ],
         ),
-        **COMMON_AUTH_ERRORS,  # DRY: Adds 401, 403, 405, 500
+        **COMMON_AUTH_ERRORS,
     },
     examples=[
         OpenApiExample(
             "Login Request",
             summary="User login with credentials",
             description="Login for James from Mombasa",
-            value={"username": "james_mwangi", "password": "MyPassword123!"},
+            value={"username": "vincent_simiyu", "password": "MyPassword123!"},
             request_only=True,
         )
     ],
 )
 
-# Profile update endpoint documentation
 profile_update_docs = extend_schema(
     tags=["Authentication"],
     summary="Update User Profile",
@@ -230,7 +259,7 @@ profile_update_docs = extend_schema(
                 )
             ],
         ),
-        **COMMON_CRUD_ERRORS,  # DRY: Adds 400, 401, 403, 404, 405, 422, 500
+        **COMMON_CRUD_ERRORS,
     },
     examples=[
         OpenApiExample(
@@ -247,7 +276,6 @@ profile_update_docs = extend_schema(
     ],
 )
 
-# Profile get documentation
 profile_get_docs = extend_schema(
     tags=["Authentication"],
     summary="Get User Profile",
@@ -275,7 +303,7 @@ profile_get_docs = extend_schema(
                 )
             ],
         ),
-        **COMMON_AUTH_ERRORS,  # DRY: Adds 401, 403, 405, 500
+        **COMMON_AUTH_ERRORS,
     },
 )
 
@@ -301,7 +329,7 @@ logout_docs = extend_schema(
                 )
             ],
         ),
-        **COMMON_AUTH_ERRORS,  # DRY: Adds 401, 403, 405, 500
+        **COMMON_AUTH_ERRORS,
     },
     examples=[
         OpenApiExample(
@@ -314,7 +342,6 @@ logout_docs = extend_schema(
     ],
 )
 
-# Token refresh endpoint documentation
 token_refresh_docs = extend_schema(
     tags=["Authentication"],
     summary="Refresh JWT Token",
@@ -327,7 +354,7 @@ token_refresh_docs = extend_schema(
             examples=[
                 OpenApiExample(
                     "Token Refresh Success",
-                    summary="James Mwangi token refreshed",
+                    summary="Vincent Simiyu token refreshed",
                     value={
                         "success": True,
                         "message": "Token refreshed successfully",
@@ -341,12 +368,12 @@ token_refresh_docs = extend_schema(
                 )
             ],
         ),
-        **COMMON_AUTH_ERRORS,  # DRY: Adds 401, 403, 500
+        **COMMON_AUTH_ERRORS,
     },
     examples=[
         OpenApiExample(
             "Token Refresh Request",
-            summary="Refresh token for James Mwangi",
+            summary="Refresh token for Vincent Simiyu",
             description="Provide existing refresh token to get new access token",
             value={"refresh": "eyJhbGciOiJIUzI1NiJ9...james_refresh"},
             request_only=True,

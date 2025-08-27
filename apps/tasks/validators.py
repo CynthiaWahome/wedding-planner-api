@@ -9,7 +9,7 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from apps.common.constants import ValidationLimits
+from apps.common.constants import TaskCategory, ValidationLimits
 from apps.common.validators.base import validate_future_date
 
 
@@ -61,7 +61,7 @@ def validate_task_due_date(due_date, wedding_date=None):
     validate_future_date(due_date)
 
     today = timezone.now().date()
-    max_future = today + timedelta(days=365 * 6)  # 6 years max for planning
+    max_future = today + timedelta(days=365 * 6)
 
     if due_date > max_future:
         raise ValidationError(
@@ -104,26 +104,9 @@ def validate_task_status(status):
 
 def validate_task_category(category):
     """Validate task category for wedding planning context."""
-    valid_categories = [
-        "venue",
-        "catering",
-        "photography",
-        "music",
-        "flowers",
-        "decorations",
-        "invitations",
-        "transportation",
-        "accommodations",
-        "attire",
-        "beauty",
-        "documentation",
-        "budget",
-        "general",
-    ]
-
-    if category not in valid_categories:
+    if category not in TaskCategory.VALID_CHOICES:
         raise ValidationError(
-            f"Task category must be one of: {', '.join(valid_categories)}."
+            f"Task category must be one of: {', '.join(TaskCategory.VALID_CHOICES)}."
         )
 
 
@@ -135,7 +118,7 @@ def validate_task_assignment(assigned_to, created_by):
 def validate_task_completion_date(completion_date, due_date=None):
     """Validate task completion date."""
     if completion_date is None:
-        return  # Completion date is optional (only for completed tasks)
+        return
 
     today = timezone.now().date()
 
@@ -143,7 +126,7 @@ def validate_task_completion_date(completion_date, due_date=None):
         raise ValidationError("Task completion date cannot be in the future.")
 
     if due_date:
-        max_overdue = due_date + timedelta(days=365)  # 1 year overdue max
+        max_overdue = due_date + timedelta(days=365)
         if completion_date > max_overdue:
             raise ValidationError(
                 "Task completion date is unreasonably far past due date."
@@ -153,7 +136,7 @@ def validate_task_completion_date(completion_date, due_date=None):
 def validate_task_estimated_hours(estimated_hours):
     """Validate estimated hours for task completion."""
     if estimated_hours is None:
-        return  # Estimated hours are optional
+        return
 
     if estimated_hours < ValidationLimits.MIN_ESTIMATED_HOURS:
         raise ValidationError(

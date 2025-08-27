@@ -64,6 +64,11 @@ class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
+    class Meta:
+        """Meta configuration for login serializer."""
+
+        pass
+
     def validate(self, attrs):
         """Validate credentials."""
         username = attrs.get("username")

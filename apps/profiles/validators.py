@@ -19,7 +19,7 @@ def validate_wedding_date_range(wedding_date):
     validate_future_date(wedding_date)
 
     today = timezone.now().date()
-    max_future = today + timedelta(days=365 * 5)  # 5 years max
+    max_future = today + timedelta(days=365 * 5)
 
     if wedding_date > max_future:
         raise ValidationError("Wedding date cannot be more than 5 years in the future.")
@@ -34,7 +34,7 @@ def validate_wedding_date_range(wedding_date):
 def validate_wedding_budget_structure(budget):
     """Validate wedding budget meets reasonable expectations."""
     if budget is None:
-        return  # Budget is optional
+        return
 
     validate_positive_amount(budget)
 
@@ -107,7 +107,7 @@ def _validate_person_name(name, person_type):
 def validate_wedding_description(description):
     """Validate wedding description content and length."""
     if description is None or description == "":
-        return  # Description is optional
+        return
 
     description = description.strip()
 
@@ -128,7 +128,7 @@ def validate_wedding_description(description):
 def validate_guest_count_for_venue(guest_count, venue_capacity=None):
     """Validate guest count makes sense for the venue."""
     if guest_count is None:
-        return  # Guest count is optional
+        return
 
     if guest_count < 1:
         raise ValidationError("Guest count must be at least 1.")
