@@ -6,7 +6,7 @@ from drf_spectacular.utils import extend_schema
 from apps.common.errors import get_error_documentation
 from apps.common.serializers import StandardSuccessResponseSerializer
 
-from .serializers import TaskCreateSerializer
+from .serializers import TaskSerializer, TaskToggleSerializer
 
 COMMON_TASK_ERRORS = {
     **get_error_documentation(400),
@@ -65,7 +65,7 @@ task_list_docs = extend_schema(
 task_create_docs = extend_schema(
     summary="Create wedding task",
     description="Create a new wedding task for the authenticated user",
-    request=TaskCreateSerializer,
+    request=TaskSerializer,
     examples=[
         OpenApiExample(
             name="Create Task Request",
@@ -156,7 +156,7 @@ task_retrieve_docs = extend_schema(
 task_update_docs = extend_schema(
     summary="Update wedding task",
     description="Update wedding task details",
-    request=TaskCreateSerializer,
+    request=TaskSerializer,
     examples=[
         OpenApiExample(
             name="Update Task Request",
@@ -253,6 +253,7 @@ task_delete_docs = extend_schema(
 task_toggle_docs = extend_schema(
     summary="Toggle task completion",
     description="Toggle the completion status of a task",
+    request=TaskToggleSerializer,
     responses={
         200: OpenApiResponse(
             response=StandardSuccessResponseSerializer,

@@ -28,7 +28,7 @@ def wedding_profile(test_user):
         user=test_user,
         wedding_date="2025-06-15",
         bride_name="Jane Doe",
-        groom_name="John Smith",
+        groom_name="Vincent Simiyu",
     )
 
 
@@ -137,9 +137,9 @@ class TestTaskSerializer:
     def test_validate_assigned_to_valid(self):
         """Test valid assignment validation."""
         serializer = TaskSerializer()
-        valid_choices = ["bride", "groom", "couple"]
+        from apps.common.constants import ValidationChoices
 
-        for choice in valid_choices:
+        for choice in ValidationChoices.TASK_ASSIGNMENTS:
             validated = serializer.validate_assigned_to(choice)
             assert validated == choice
 

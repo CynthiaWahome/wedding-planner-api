@@ -12,10 +12,12 @@ from rest_framework.permissions import IsAuthenticated
 from apps.common.responses import APIResponse
 
 from .docs import (
+    vendor_categories_docs,
     vendor_create_docs,
     vendor_delete_docs,
     vendor_list_docs,
     vendor_retrieve_docs,
+    vendor_search_docs,
     vendor_update_docs,
 )
 from .models import Vendor
@@ -135,6 +137,7 @@ def delete_vendor(request, vendor_id):
         return APIResponse.not_found(message="Vendor not found")
 
 
+@vendor_categories_docs
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def vendor_categories(request):
@@ -177,6 +180,7 @@ def vendor_categories(request):
         )
 
 
+@vendor_search_docs
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def search_vendors(request):

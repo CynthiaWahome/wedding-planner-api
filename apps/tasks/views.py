@@ -15,6 +15,7 @@ from .docs import (
     task_delete_docs,
     task_list_docs,
     task_retrieve_docs,
+    task_toggle_docs,
     task_update_docs,
 )
 from .models import Task
@@ -144,6 +145,7 @@ def delete_task(request, task_id):
         return APIResponse.not_found(message="Task not found")
 
 
+@task_toggle_docs
 @api_view(["PATCH"])
 @permission_classes([IsAuthenticated])
 def toggle_task_completion(request, task_id):

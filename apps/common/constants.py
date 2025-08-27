@@ -264,3 +264,14 @@ class TaskCategory:
         BUDGET,
         GENERAL,
     ]
+
+
+class ValidationChoices:
+    """Centralized validation choices for consistent validation across apps."""
+
+    RSVP_STATUSES = ["invited", "confirmed", "declined", "maybe"]
+    TASK_STATUSES = ["pending", "in_progress", "completed", "cancelled", "on_hold"]
+    TASK_PRIORITIES = ["low", "medium", "high", "urgent"]
+    RESTRICTED_GUEST_TYPES = ["child", "vendor_staff"]
+    AGE_CATEGORIES = ["adult", "child", "infant"]
+    TASK_ASSIGNMENTS = ["bride", "groom", "couple"]

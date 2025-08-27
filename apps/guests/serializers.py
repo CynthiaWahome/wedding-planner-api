@@ -82,3 +82,14 @@ class GuestCreateSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         validated_data["wedding_profile"] = user.wedding_profile
         return super().create(validated_data)
+
+
+class RSVPUpdateSerializer(serializers.Serializer):
+    """Serializer for RSVP status update operation."""
+
+    rsvp_status = serializers.CharField(max_length=20)
+
+    def validate_rsvp_status(self, value):
+        """Validate RSVP status choice."""
+        validate_rsvp_status(value)
+        return value

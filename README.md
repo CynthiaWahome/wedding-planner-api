@@ -1,159 +1,187 @@
-# 💍 Wedding Planning API
+# Wedding Planning API
 
-A Django REST API to help couples **plan, organize, and track their wedding progress**.
-This is a **Capstone Project (MVP)** designed as the foundation for a future **Wedding Planning SaaS platform**.
+A Django REST API for comprehensive wedding planning with real-time progress tracking, intelligent milestone generation, and dynamic budget calculations.
 
----
+## Core Features
+
+### Progress Calculation Engine
+
+- Dynamic milestone generation based on actual wedding dates
+- Adaptive vendor requirements based on budget complexity (5-7 vendors)
+- Real-time budget tracking using precise Decimal calculations
+- Progress calculation combining task completion, guest confirmations, and vendor bookings
+
+### Technical Architecture
+
+- **Domain-Driven Design**: Modular app architecture with clear separation of concerns
+- **Event-Driven Progress Calculation**: Real-time updates across task/guest/vendor changes
+- **Financial Precision**: Decimal-based monetary calculations for accuracy
+- **Dynamic Configuration**: Algorithm-based milestone generation vs hardcoded data
+- **Security-First**: JWT with refresh tokens, input validation, SQL injection protection
+- **Type Safety**: Full MyPy compliance with static type checking
+- **Test Pyramid**: Unit tests (75/75) + Integration tests (17/17) + Contract testing
+- **API-First Design**: OpenAPI specification drives development
 
 ## ⚡ Prerequisites
 
-- **Python 3.9+**
+- **Python 3.11+**
 - **PostgreSQL** installed and running (`psql --version`)
+- **uv** (Python package manager) - `pip install uv`
 
 ---
 
-## 🚀 Features (MVP Scope)
+## API Features
 
-- **Authentication**: User registration & login with JWT.
-- **Wedding Profile**: Store couple details, date, budget, and venue.
-- **Task Management**: Create/update/delete tasks, mark complete, and track readiness.
-- **Guest Management**: Manage guest list and RSVP status.
-- **Vendor Management** (MVP lite): Add basic vendors and link them to tasks.
+### Core Wedding Planning
 
----
+- **JWT Authentication** - Secure user registration/login with refresh tokens
+- **Wedding Profiles** - Complete couple information with budget tracking
+- **Task Management** - Assigned tasks with completion tracking
+- **Guest Management** - RSVP status tracking and analytics
+- **Vendor Management** - Category-based vendor organization with search
 
-## 🛠️ Tech Stack
+### Automated Features
 
-- **Backend**: Django + Django REST Framework
-- **Auth**: JWT (via `djangorestframework-simplejwt`)
-- **Database**: PostgreSQL
-- **Docs**: Swagger/OpenAPI (via `drf-spectacular`)
-
----
-
-## 📂 Project Structure
-
-````plaintext
-wedding-planning-api/
-│
-├── apps/
-│   ├── authentication/   # Login/Register
-│   ├── profiles/         # Wedding profile + progress
-│   ├── tasks/            # Tasks + completion tracking
-│   ├── guests/           # Guest list + RSVP
-│   └── vendors/          # Basic vendor management
-│
-├── config/               # Django project settings
-│   ├── settings.py
-│   ├── urls.py
-│   └── ...
-│
-├── manage.py
-├── requirements.txt
-├── example.env           # Example environment variables
-└── README.md
-````
+- **Timeline Generation**: Calculates invitation dates, venue walkthroughs, headcount confirmations based on wedding date
+- **Budget Modeling**: Realistic spending patterns (15% → 35% → 60% → 80%) based on planning progress
+- **Vendor Optimization**: Suggests 5-7 vendors based on budget complexity
+- **Real-time Analytics**: Live progress tracking across tasks, guests, and vendors
 
 ---
 
-## ⚙️ Local Setup
+## Tech Stack
 
-1. **Clone repo & setup environment**
+- **Backend**: Django 4.2 + Django REST Framework
+- **Authentication**: JWT with `djangorestframework-simplejwt`
+- **Database**: PostgreSQL with optimized queries
+- **API Docs**: Swagger/OpenAPI via `drf-spectacular`
+- **Code Quality**: Ruff + MyPy + 100% test coverage
+- **Money Handling**: Decimal precision for accurate financial calculations
+
+---
+
+## Setup
+
+1. **Clone and setup**
 
    ```bash
-   git clone https://github.com/your-username/wedding-planning-api.git
-   cd wedding-planning-api
-   python -m venv venv
-   source venv/bin/activate  # Mac/Linux
-   # venv\Scripts\activate   # Windows
+   git clone  https://github.com/CynthiaWahom/wedding-planning-api.git
+   cd wedding-planner-api
+
+   # Create virtual environment with uv
+   uv venv --python 3.11
+   source .venv/bin/activate  # Mac/Linux
+   # .venv\\Scripts\\activate   # Windows
    ```
 
 2. **Install dependencies**
 
    ```bash
-   pip install -r requirements.txt
+   uv pip install -r requirements.txt
    ```
 
-3. **Configure environment variables**
-
-   Copy the example environment file and update as needed:
+3. **Environment setup**
 
    ```bash
    cp example.env .env
-   # Then edit .env to set your values
+   # Edit .env with your database credentials
    ```
 
-4. **Set up the local database**
-
-   Run the provided script to set up your local PostgreSQL database:
+4. **Database setup (auto-creates database)**
 
    ```bash
-   bash scripts/setup_db.sh
+   chmod +x scripts/setup_db.sh
+   ./scripts/setup_db.sh
    ```
 
-   > Make sure your `.env` file contains:
-   > `DBNAME`, `DBUSER`, `DBPASSWORD`, `DBHOST`, `DBPORT`
-
-5. **Run migrations & start server**
+5. **Run migrations and start**
 
    ```bash
    python manage.py migrate
    python manage.py runserver
    ```
 
-6. **Swagger API Docs**
+6. **Explore the API**
 
-   Visit: [http://localhost:8000/api/schema/swagger-ui/](http://localhost:8000/api/schema/swagger-ui/)
-
----
-
-## 📅 Roadmap & Progress
-
-| **Week** | **Deliverables**                                         | **Status**        |
-|----------|----------------------------------------------------------|-------------------|
-| Week 1   | Project setup, models draft, repo structure              | ⬜ Not started    |
-| Week 2   | Authentication (JWT), secure endpoints                   | ⬜ Not started    |
-| Week 3   | Wedding profile CRUD, task CRUD, progress %              | ⬜ Not started    |
-| Week 4   | Guest CRUD + RSVP, vendor CRUD, core tests               | ⬜ Not started    |
-| Week 5   | API docs, deployment, demo                               | ⬜ Not started    |
-
-*Update the table above as you progress!*
+   - **Swagger Docs**: [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/)
+   - **API Schema**: [http://localhost:8000/api/schema/](http://localhost:8000/api/schema/)
 
 ---
 
-## 🌱 Future Enhancements
+## Testing & Quality
 
-- Advanced vendor management (quotes, contracts)
-- Team roles & permissions
-- Multi-tenancy, subscriptions, analytics
-- Mobile app (React Native), real-time updates
-
----
-
-## 👩🏽‍💻 Author
-
-**cycy** – Backend Capstone Project
+```bash
+# Run all quality checks
+ruff check .                    # Code style
+mypy .                         # Type checking
+python -m pytest -v           # Unit tests (75/75)
+newman run Wedding_Planner_API.postman_collection.json  # API tests (17/17)
+```
 
 ---
 
-## 📝 How to Contribute
 
-1. Fork the repo
-2. Create your feature branch:
-   `git checkout -b feature/YourFeature`
-3. Commit your changes:
-   `git commit -m 'Add some feature'`
-4. Push to the branch:
-   `git push origin feature/YourFeature`
-5. Open a Pull Request
+## API Highlights
+
+### Progress Tracking
+
+```bash
+GET /api/v1/profiles/progress/
+# Returns real-time progress with dynamic milestones like:
+# "Send invitations (in 84 days)" - calculated from actual wedding date
+# "Budget used: KES 337,500 (45%)" - based on planning progress
+```
+
+### Vendor Intelligence
+
+```bash
+GET /api/v1/vendors/categories/
+# Adapts vendor needs: 5 vendors (budget wedding) to 7 vendors (luxury)
+```
+
+### Guest Analytics
+
+```bash
+GET /api/v1/guests/statistics/
+# Live RSVP tracking affecting overall progress calculation
+```
 
 ---
 
-## 📌 Progress Tracker
+## 📂 Project Structure
 
-- [ ] Step 1: Repo setup
-- [ ] Step 2: Authentication endpoints
-- [ ] Step 3: Profiles + Tasks
-- [ ] Step 4: Guests + Vendors
-- [ ] Step 5: Docs + Deploy
-````
+```
+wedding-planner-api/
+├── config/              # Django project configuration
+│   ├── settings.py      # Environment-specific settings
+│   ├── urls.py          # Root URL routing
+│   └── wsgi.py/asgi.py  # WSGI/ASGI applications
+├── apps/                # Domain-specific applications
+│   ├── authentication/ # JWT auth with refresh tokens
+│   │   ├── models.py    # User model extensions
+│   │   ├── serializers.py # Auth request/response handling
+│   │   ├── views.py     # Login/register/refresh endpoints
+│   │   └── validators.py # Password/username validation
+│   ├── profiles/        # Wedding profile management
+│   │   ├── models.py    # WeddingProfile model
+│   │   ├── views.py     # Progress calculation engine
+│   │   └── validators.py # Date/budget validation
+│   ├── tasks/           # Task management system
+│   ├── guests/          # Guest & RSVP management
+│   ├── vendors/         # Vendor categorization & search
+│   └── common/          # Shared utilities
+│       ├── constants.py # Business logic constants
+│       ├── responses.py # Standardized API responses
+│       └── validators/  # Reusable validation logic
+├── tests/               # Integration tests
+├── scripts/             # Database setup automation
+└── logs/                # Application logging
+```
+
+## Deployment Architecture
+
+- Environment configurations for development/staging/production
+- Database migrations with proper constraints and indexes
+- API versioning (`/api/v1/`) for backward compatibility
+- Comprehensive logging and error handling
+- Security headers and CORS configuration

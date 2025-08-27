@@ -28,7 +28,7 @@ def wedding_profile(test_user):
         user=test_user,
         wedding_date=date.today() + timedelta(days=365),
         bride_name="Jane Doe",
-        groom_name="John Smith",
+        groom_name="Vincent Simiyu",
         venue="Beautiful Garden",
         budget=Decimal("50000.00"),
     )
@@ -100,7 +100,7 @@ class TestWeddingProfileSerializer:
         data = serializer.data
 
         assert data["bride_name"] == "Jane Doe"
-        assert data["groom_name"] == "John Smith"
+        assert data["groom_name"] == "Vincent Simiyu"
         assert data["venue"] == "Beautiful Garden"
         assert data["budget"] == "50000.00"
         assert "user" in data
