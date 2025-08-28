@@ -63,6 +63,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "apps.common.middleware.RequestLoggingMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -219,6 +220,13 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Logging Configuration from Environment
+LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO" if DEBUG else "WARNING")
+LOG_REQUEST_BODIES = (
+    os.environ.get("LOG_REQUEST_BODIES", "True").lower() == "true" and DEBUG
+)
+LOG_TO_FILE = os.environ.get("LOG_TO_FILE", "True").lower() == "true"
+LOG_TO_CONSOLE = os.environ.get("LOG_TO_CONSOLE", "True").lower() == "true"
 
 # Create logs directory
 LOGS_DIR = BASE_DIR / "logs"
@@ -274,7 +282,17 @@ LOGGING = {
         },
         "apps": {
             "handlers": ["console", "file"],
-            "level": "INFO",
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+        "apps.requests": {
+            "handlers": ["console", "file"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
+        "apps.errors": {
+            "handlers": ["console", "file"],
+            "level": "WARNING",
             "propagate": False,
         },
     },
