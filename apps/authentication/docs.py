@@ -1,7 +1,5 @@
 """Authentication API documentation with DRY error responses."""
 
-from typing import Any
-
 from drf_spectacular.utils import (
     OpenApiExample,
     OpenApiResponse,
@@ -15,6 +13,7 @@ from apps.common.errors import (
     COMMON_CREATE_ERRORS,
     COMMON_CRUD_ERRORS,
 )
+from apps.common.serializers import StandardSuccessResponseSerializer
 
 from .serializers import UserLoginSerializer, UserRegistrationSerializer, UserSerializer
 
@@ -84,12 +83,6 @@ class TokensSerializer(serializers.Serializer):
         )
     ]
 )
-class StandardSuccessResponseSerializer(serializers.Serializer):
-    success = serializers.BooleanField(default=True, help_text="Success status")
-    message = serializers.CharField(help_text="Response message")
-    data: Any = serializers.JSONField(help_text="Response data")
-
-
 class LogoutRequestSerializer(serializers.Serializer):
     """Simple logout request serializer for docs."""
 
@@ -130,7 +123,7 @@ class TokenRefreshResponseSerializer(serializers.Serializer):
 
 
 register_docs = extend_schema(
-    tags=["Authentication"],
+    tags=["authentication"],
     summary="User Registration",
     description="Register a new user account for wedding planning",
     request=UserRegistrationSerializer,
@@ -141,17 +134,17 @@ register_docs = extend_schema(
             examples=[
                 OpenApiExample(
                     "Registration Success",
-                    summary="Wanjiku Kamau Registration Success",
+                    summary="User Registration Success",
                     value={
                         "success": True,
                         "message": "User registered successfully",
                         "data": {
                             "user": {
                                 "id": 1,
-                                "username": "wanjiku_kamau",
-                                "email": "aisha.vincent@gmail.com",
-                                "first_name": "Wanjiku",
-                                "last_name": "Kamau",
+                                "username": "wambui_kariuki",
+                                "email": "wambui_kariuki@example.com",
+                                "first_name": "Wambui",
+                                "last_name": "Kariuki",
                                 "date_joined": "2024-08-26T10:30:00Z",
                             },
                             "tokens": {
@@ -168,11 +161,11 @@ register_docs = extend_schema(
     examples=[
         OpenApiExample(
             "Registration Request",
-            summary="Sample Kenyan user registration",
-            description="Example registration for Wanjiku from Nairobi",
+            summary="User registration",
+            description="Example registration",
             value={
-                "username": "wanjiku_kamau",
-                "email": "aisha.vincent@gmail.com",
+                "username": "wambui_kariuki",
+                "email": "wambui_kariukir@example.com",
                 "first_name": "Wanjiku",
                 "last_name": "Kamau",
                 "password": "SecurePass123!",
@@ -184,7 +177,7 @@ register_docs = extend_schema(
 )
 
 login_docs = extend_schema(
-    tags=["Authentication"],
+    tags=["authentication"],
     summary="User Login",
     description="Authenticate user and receive JWT tokens",
     request=UserLoginSerializer,
@@ -195,7 +188,7 @@ login_docs = extend_schema(
             examples=[
                 OpenApiExample(
                     "Login Success",
-                    summary="Vincent Simiyu Login Success",
+                    summary="User Login Success",
                     value={
                         "success": True,
                         "message": "Login successful",
@@ -203,9 +196,9 @@ login_docs = extend_schema(
                             "user": {
                                 "id": 2,
                                 "username": "vincent_simiyu",
-                                "email": "james.mwangi@yahoo.com",
-                                "first_name": "James",
-                                "last_name": "Mwangi",
+                                "email": "vincent_simiyu@yahoo.com",
+                                "first_name": "Vincent",
+                                "last_name": "Simiyu",
                                 "date_joined": "2024-08-20T14:20:00Z",
                             },
                             "tokens": {
@@ -223,7 +216,6 @@ login_docs = extend_schema(
         OpenApiExample(
             "Login Request",
             summary="User login with credentials",
-            description="Login for James from Mombasa",
             value={"username": "vincent_simiyu", "password": "MyPassword123!"},
             request_only=True,
         )
@@ -231,7 +223,7 @@ login_docs = extend_schema(
 )
 
 profile_update_docs = extend_schema(
-    tags=["Authentication"],
+    tags=["authentication"],
     summary="Update User Profile",
     description="Update authenticated user profile with atomic transactions.",
     request=UserSerializer,
@@ -277,7 +269,7 @@ profile_update_docs = extend_schema(
 )
 
 profile_get_docs = extend_schema(
-    tags=["Authentication"],
+    tags=["authentication"],
     summary="Get User Profile",
     description="Retrieve current authenticated user's profile information",
     responses={
@@ -307,9 +299,8 @@ profile_get_docs = extend_schema(
     },
 )
 
-# Logout documentation
 logout_docs = extend_schema(
-    tags=["Authentication"],
+    tags=["authentication"],
     summary="User Logout",
     description="Logout user by blacklisting refresh token to prevent reuse",
     request=LogoutRequestSerializer,
@@ -343,7 +334,7 @@ logout_docs = extend_schema(
 )
 
 token_refresh_docs = extend_schema(
-    tags=["Authentication"],
+    tags=["authentication"],
     summary="Refresh JWT Token",
     description="Takes a refresh token and returns a new access token",
     request=LogoutRequestSerializer,
@@ -354,7 +345,7 @@ token_refresh_docs = extend_schema(
             examples=[
                 OpenApiExample(
                     "Token Refresh Success",
-                    summary="Vincent Simiyu token refreshed",
+                    summary="User token refreshed",
                     value={
                         "success": True,
                         "message": "Token refreshed successfully",
@@ -373,7 +364,7 @@ token_refresh_docs = extend_schema(
     examples=[
         OpenApiExample(
             "Token Refresh Request",
-            summary="Refresh token for Vincent Simiyu",
+            summary="Refresh user access token",
             description="Provide existing refresh token to get new access token",
             value={"refresh": "eyJhbGciOiJIUzI1NiJ9...james_refresh"},
             request_only=True,

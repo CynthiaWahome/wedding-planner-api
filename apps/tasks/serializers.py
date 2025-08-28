@@ -94,3 +94,9 @@ class TaskCreateSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         validated_data["wedding_profile"] = user.wedding_profile
         return super().create(validated_data)
+
+
+class TaskToggleSerializer(serializers.Serializer):
+    """Serializer for task completion toggle operation."""
+
+    pass

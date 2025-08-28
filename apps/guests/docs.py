@@ -6,7 +6,7 @@ from drf_spectacular.utils import extend_schema
 from apps.common.errors import get_error_documentation
 from apps.common.serializers import StandardSuccessResponseSerializer
 
-from .serializers import GuestCreateSerializer
+from .serializers import GuestSerializer, RSVPUpdateSerializer
 
 COMMON_GUEST_ERRORS = {
     **get_error_documentation(400),
@@ -63,7 +63,7 @@ guest_list_docs = extend_schema(
 guest_create_docs = extend_schema(
     summary="Create wedding guest",
     description="Add a new guest to the wedding guest list",
-    request=GuestCreateSerializer,
+    request=GuestSerializer,
     examples=[
         OpenApiExample(
             name="Create Guest Request",
@@ -152,7 +152,7 @@ guest_retrieve_docs = extend_schema(
 guest_update_docs = extend_schema(
     summary="Update wedding guest",
     description="Update wedding guest details",
-    request=GuestCreateSerializer,
+    request=GuestSerializer,
     examples=[
         OpenApiExample(
             name="Update Guest Request",
@@ -247,6 +247,7 @@ guest_delete_docs = extend_schema(
 guest_rsvp_update_docs = extend_schema(
     summary="Update guest RSVP status",
     description="Update a specific guest's RSVP status",
+    request=RSVPUpdateSerializer,
     responses={
         200: OpenApiResponse(
             response=StandardSuccessResponseSerializer,

@@ -203,6 +203,7 @@ profile_update_docs = extend_schema(
     },
 )
 
+
 profile_delete_docs = extend_schema(
     summary="Delete wedding profile",
     description="Delete wedding profile by ID",
@@ -226,6 +227,61 @@ profile_delete_docs = extend_schema(
             examples=[
                 OpenApiExample(
                     name="Not Found",
+                    value={
+                        "success": False,
+                        "message": "Wedding profile not found",
+                        "data": None,
+                        "errors": {"detail": "Wedding profile not found"},
+                    },
+                )
+            ],
+        ),
+        **COMMON_PROFILE_ERRORS,
+    },
+)
+
+
+profile_progress_docs = extend_schema(
+    summary="Get wedding planning progress",
+    description="Get wedding progress statistics for tasks, guests, and vendors",
+    responses={
+        200: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            examples=[
+                OpenApiExample(
+                    name="Success Response",
+                    value={
+                        "success": True,
+                        "message": "Wedding progress retrieved successfully",
+                        "data": {
+                            "tasks_progress": {
+                                "total_tasks": 12,
+                                "completed_tasks": 8,
+                                "percentage": 66.7,
+                            },
+                            "guests_progress": {
+                                "total_guests": 150,
+                                "confirmed_guests": 120,
+                                "percentage": 80.0,
+                            },
+                            "vendors_progress": {
+                                "vendors_booked": 5,
+                                "vendors_needed": 8,
+                                "percentage": 62.5,
+                            },
+                            "days_remaining": 45,
+                            "overall_progress": 69.7,
+                        },
+                        "errors": None,
+                    },
+                )
+            ],
+        ),
+        404: OpenApiResponse(
+            response=StandardSuccessResponseSerializer,
+            examples=[
+                OpenApiExample(
+                    name="Profile Not Found",
                     value={
                         "success": False,
                         "message": "Wedding profile not found",

@@ -15,6 +15,7 @@ from apps.common.responses import APIResponse
 from .docs import (
     profile_create_docs,
     profile_delete_docs,
+    profile_progress_docs,
     profile_retrieve_docs,
     profile_update_docs,
 )
@@ -222,6 +223,7 @@ def delete_profile(request):
         return APIResponse.not_found(message="Wedding profile not found")
 
 
+@profile_progress_docs
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def wedding_progress(request):

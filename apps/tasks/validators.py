@@ -84,21 +84,20 @@ def validate_task_due_date(due_date, wedding_date=None):
 
 def validate_task_priority(priority):
     """Validate task priority level."""
-    valid_priorities = ["low", "medium", "high", "urgent"]
+    from apps.common.constants import ValidationChoices
 
-    if priority not in valid_priorities:
-        raise ValidationError(
-            f"Task priority must be one of: {', '.join(valid_priorities)}."
-        )
+    if priority not in ValidationChoices.TASK_PRIORITIES:
+        choices_str = ", ".join(ValidationChoices.TASK_PRIORITIES)
+        raise ValidationError(f"Task priority must be one of: {choices_str}.")
 
 
 def validate_task_status(status):
     """Validate task status."""
-    valid_statuses = ["pending", "in_progress", "completed", "cancelled", "on_hold"]
+    from apps.common.constants import ValidationChoices
 
-    if status not in valid_statuses:
+    if status not in ValidationChoices.TASK_STATUSES:
         raise ValidationError(
-            f"Task status must be one of: {', '.join(valid_statuses)}."
+            f"Task status must be one of: {', '.join(ValidationChoices.TASK_STATUSES)}."
         )
 
 
