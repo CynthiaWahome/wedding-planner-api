@@ -49,8 +49,8 @@ def register(request):
             message="User registered successfully",
         )
 
-    return StandardErrors.validation_error(
-        errors=list(serializer.errors.values()), message="Registration failed"
+    return StandardErrors.bad_request(
+        message="Registration failed - please check your input"
     )
 
 
@@ -123,8 +123,8 @@ def update_profile(request):
             data=serializer.data, message="Profile updated successfully"
         )
 
-    return StandardErrors.validation_error(
-        errors=list(serializer.errors.values()), message="Profile update failed"
+    return StandardErrors.bad_request(
+        message="Profile update failed - please check your input"
     )
 
 
